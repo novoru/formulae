@@ -149,49 +149,7 @@ Token *next_token_lexer(Lexer *l) {
     }
     else if(isalpha(l->src[l->pos])) {
       char *lit = read_ident(l);
-
-      if(!strcmp(lit, "lambda")){
-	tok = new_token(TOK_LAMBDA, lit);	
-      }
-      else if(!strcmp(lit, "define")){
-	tok = new_token(TOK_DEFINE, lit);	
-      }
-      else if(!strcmp(lit, "let")){
-	tok = new_token(TOK_LET, lit);	
-      }
-      else if(!strcmp(lit, "letrec")){
-	tok = new_token(TOK_LETREC, lit);	
-      }
-      else if(!strcmp(lit, "do")){
-	tok = new_token(TOK_DO, lit);	
-      }
-      else if(!strcmp(lit, "quote")){
-	tok = new_token(TOK_QUOTE, lit);	
-      }
-      else if(!strcmp(lit, "car")){
-	tok = new_token(TOK_CAR, lit);	
-      }
-      else if(!strcmp(lit, "cdr")){
-	tok = new_token(TOK_CDR, lit);	
-      }
-      else if(!strcmp(lit, "and")){
-	tok = new_token(TOK_AND, lit);	
-      }
-      else if(!strcmp(lit, "or")){
-	tok = new_token(TOK_OR, lit);	
-      }
-      else if(!strcmp(lit, "if")){
-	tok = new_token(TOK_IF, lit);	
-      }
-      else if(!strcmp(lit, "cond")){
-	tok = new_token(TOK_COND, lit);	
-      }
-      else if(!strcmp(lit, "nil")) {
-	tok = new_token(TOK_NIL, lit);
-      }
-      else
-	tok = new_token(TOK_IDENT, lit);
-      
+      tok = new_token(TOK_IDENT, lit);
       return tok;
     }
     else

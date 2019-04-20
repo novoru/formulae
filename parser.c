@@ -80,7 +80,7 @@ static SExpr *parse_list(Parser *p) {
 
 static SExpr *parse_symbol(Parser *p) {
   printf("parse_symbol\n");
-  return NULL;
+  return new_sexpr_symbol(p->curTok);
 }
 
 static SExpr *parse_str(Parser *p) {
@@ -90,7 +90,6 @@ static SExpr *parse_str(Parser *p) {
 
 static SExpr *parse_int(Parser *p) {
   printf("parse_int\n");
-  printf("num: %d\n", atoi(p->curTok->lit));
   return new_sexpr_int(atoi(p->curTok->lit));
 }
 

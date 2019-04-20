@@ -113,39 +113,39 @@ static void test_keyword() {
   Lexer *l = new_lexer(src);
 
   Token *lambda = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, lambda, TOK_LAMBDA, "lambda");  
+  expect_token(__FILE__, __LINE__, lambda, TOK_IDENT, "lambda");  
 
   Token *define = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, define, TOK_DEFINE, "define");  
+  expect_token(__FILE__, __LINE__, define, TOK_IDENT, "define");  
   Token *let = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, let, TOK_LET, "let");  
+  expect_token(__FILE__, __LINE__, let, TOK_IDENT, "let");  
 
   Token *letrec = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, letrec, TOK_LETREC, "letrec");  
+  expect_token(__FILE__, __LINE__, letrec, TOK_IDENT, "letrec");  
 
   Token *_do = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, _do, TOK_DO, "do");  
+  expect_token(__FILE__, __LINE__, _do, TOK_IDENT, "do");  
 
   Token *quote = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, quote, TOK_QUOTE, "quote");  
+  expect_token(__FILE__, __LINE__, quote, TOK_IDENT, "quote");  
 
   Token *car = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, car, TOK_CAR, "car");  
+  expect_token(__FILE__, __LINE__, car, TOK_IDENT, "car");  
 
   Token *cdr = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, cdr, TOK_CDR, "cdr");  
+  expect_token(__FILE__, __LINE__, cdr, TOK_IDENT, "cdr");  
 
   Token *and = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, and, TOK_AND, "and");  
+  expect_token(__FILE__, __LINE__, and, TOK_IDENT, "and");  
 
   Token *or = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, or, TOK_OR, "or");  
+  expect_token(__FILE__, __LINE__, or, TOK_IDENT, "or");  
 
   Token *_if = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, _if, TOK_IF, "if");  
+  expect_token(__FILE__, __LINE__, _if, TOK_IDENT, "if");  
 
   Token *cond = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, cond, TOK_COND, "cond");  
+  expect_token(__FILE__, __LINE__, cond, TOK_IDENT, "cond");  
   Token *_true = next_token_lexer(l);
   expect_token(__FILE__, __LINE__, _true, TOK_TRUE, "#t");
 
@@ -153,7 +153,7 @@ static void test_keyword() {
   expect_token(__FILE__, __LINE__, _false, TOK_FALSE, "#f"); 
 
   Token *nil = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, nil, TOK_NIL, "nil"); }
+  expect_token(__FILE__, __LINE__, nil, TOK_IDENT, "nil"); }
 
 void test_lexer() {
   printf("*test_lexer*\n");
