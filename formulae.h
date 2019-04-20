@@ -119,6 +119,7 @@ SExpr *new_sexpr_int(int num);
 SExpr *new_sexpr_float(float fnum);
 SExpr *new_sexpr_nil();
 void sexpr_append(SExpr *sepxr, SExpr *cdr);
+char *inspect_sexpr(SExpr *sexpr);
 
 // parser.c
 typedef struct Parser{
@@ -130,5 +131,8 @@ typedef struct Parser{
 Parser *new_parser(Lexer *l);
 void next_token_parser(Parser *p);
 SExpr *parse_sexpr(Parser *p);
+
+// repl.c
+void repl();
 
 #endif

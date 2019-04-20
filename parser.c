@@ -39,7 +39,6 @@ SExpr *parse_sexpr(Parser *p) {
 }
 
 static SExpr *parse_expr(Parser *p) {
-  printf("parse_expr\n");
   switch(p->curTok->kind) {
   case TOK_LPAREN:
     next_token_parser(p);
@@ -60,6 +59,10 @@ static SExpr *parse_expr(Parser *p) {
     }
     
     return expr;
+  case TOK_PLUS:
+  case TOK_MINUS:
+  case TOK_ASTERISK:
+  case TOK_SLASH:
   case TOK_IDENT:
     return parse_symbol(p);
   case TOK_DOUBLE_QUOTE:
@@ -74,27 +77,22 @@ static SExpr *parse_expr(Parser *p) {
 }
 
 static SExpr *parse_list(Parser *p) {
-  printf("parse_list\n");
   return NULL;
 }
 
 static SExpr *parse_symbol(Parser *p) {
-  printf("parse_symbol\n");
   return new_sexpr_symbol(p->curTok);
 }
 
 static SExpr *parse_str(Parser *p) {
-  printf("parse_str\n");
   return NULL;
 }
 
 static SExpr *parse_int(Parser *p) {
-  printf("parse_int\n");
   return new_sexpr_int(atoi(p->curTok->lit));
 }
 
 static SExpr *parse_float(Parser *p) {
-  printf("parse_float\n");
   return NULL;
 }
 

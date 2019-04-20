@@ -60,3 +60,23 @@ void sexpr_append(SExpr *sexpr, SExpr *cdr) {
   else
     tmp->cdr = new_sexpr(tmp->cdr, cdr);
 }
+
+char *inspect_sexpr(SExpr *sexpr) {
+  switch(sexpr->kind) {
+  case SE_LIST:
+    return format("(%s %s)", inspect_sexpr(sexpr->car), inspect_sexpr(sexpr->cdr));
+  case SE_SYMBOL:
+    return format("%s", sexpr->car->symbol);
+  case SE_STRING:
+    return format("%s", sexpr->car->str);
+  case SE_INT:
+    return format("%s", sexpr->car->num);
+  case SE_FLOAT:
+    return format("%s", sexpr->car->fnum);
+  case SE_NIL:
+    return format("()");
+  default:
+    printf("(%s: %d) invalid s-expression\n", __FILE__, __LINE__);
+    exit(1);
+  }
+}

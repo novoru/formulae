@@ -3,5 +3,6 @@
 
 void test_util();
 void test_lexer();
+void test_parser();
 
 #endif
