@@ -41,3 +41,22 @@ SExpr *new_sexpr_float(float fnum) {
 
   return sexpr;  
 }
+
+SExpr *new_sexpr_nil() {
+  SExpr *sexpr = malloc(sizeof(SExpr));
+  sexpr->kind = SE_NIL;
+
+  return sexpr;  
+}
+
+void sexpr_append(SExpr *sexpr, SExpr *cdr) {
+  SExpr *tmp = sexpr;
+  while(tmp->cdr->kind == SE_LIST) {
+    tmp = tmp->cdr;
+  }
+
+  if(tmp->cdr->kind == SE_NIL)
+    tmp->cdr = cdr;
+  else
+    tmp->cdr = new_sexpr(tmp->cdr, cdr);
+}

@@ -117,5 +117,18 @@ SExpr *new_sexpr_symbol(Token *tok);
 SExpr *new_sexpr_str(char *str);
 SExpr *new_sexpr_int(int num);
 SExpr *new_sexpr_float(float fnum);
+SExpr *new_sexpr_nil();
+void sexpr_append(SExpr *sepxr, SExpr *cdr);
+
+// parser.c
+typedef struct Parser{
+  Lexer *l;
+  Token *curTok;
+  Token *peekTok;
+} Parser;
+
+Parser *new_parser(Lexer *l);
+void next_token_parser(Parser *p);
+SExpr *parse_sexpr(Parser *p);
 
 #endif
