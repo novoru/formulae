@@ -64,15 +64,18 @@ void sexpr_append(SExpr *sexpr, SExpr *cdr) {
 char *inspect_sexpr(SExpr *sexpr) {
   switch(sexpr->kind) {
   case SE_LIST:
-    return format("(%s %s)", inspect_sexpr(sexpr->car), inspect_sexpr(sexpr->cdr));
+    ;
+    char *car = inspect_sexpr(sexpr->car);
+    char *cdr = inspect_sexpr(sexpr->cdr);
+    return format("(%s %s)", car, cdr);
   case SE_SYMBOL:
-    return format("%s", sexpr->car->symbol);
+    return format("%s", sexpr->symbol->lit);
   case SE_STRING:
-    return format("%s", sexpr->car->str);
+    return format("%s", sexpr->str);
   case SE_INT:
-    return format("%s", sexpr->car->num);
+    return format("%d", sexpr->num);
   case SE_FLOAT:
-    return format("%s", sexpr->car->fnum);
+    return format("%f", sexpr->fnum);
   case SE_NIL:
     return format("()");
   default:
