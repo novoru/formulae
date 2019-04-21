@@ -101,7 +101,7 @@ SExpr *new_sexpr_str(char *src);
 SExpr *new_sexpr_int(int num);
 SExpr *new_sexpr_float(float fnum);
 SExpr *new_sexpr_nil();
-void sexpr_append(SExpr *sexpr, SExpr *cdr);
+void sexpr_append(SExpr *sexpr, void *cdr);
 char *inspect_sexpr(SExpr *sexpr);
 
 // parser.c

@@ -53,27 +53,25 @@ SExpr *new_sexpr_nil() {
   return sexpr;  
 }
 
-void sexpr_append(SExpr *sexpr, SExpr *cdr) {
+void sexpr_append(SExpr *sexpr, void *cdr) {
   SExpr *tmp = sexpr;
   while(((SExpr*)tmp->cdr)->kind != SE_NIL) {
     tmp = tmp->cdr;
   }
+
   tmp->cdr = cdr;
 }
 
 char *inspect_sexpr(SExpr *sexpr) {
   switch(sexpr->kind) {
   case SE_LIST:
-    ;
-    char *car = inspect_sexpr((SExpr*)sexpr->car);
-    char *cdr = inspect_sexpr(sexpr->cdr);
-    return format("(%s %s)", car, cdr);
+    return format("(%s %s)", inspect_sexpr((SExpr*)sexpr->car), inspect_sexpr((SExpr*)sexpr->cdr));
   case SE_SYMBOL:
-    return format("%s", (char*)((Token*)sexpr->car)->lit);
+    return format("%s %s", ((Token*)sexpr->car)->lit, inspect_sexpr((SExpr*)sexpr->cdr));
   case SE_STRING:
-    return format("%s", (char*)sexpr->car);
+    return format("%s %s", (char*)sexpr->car, inspect_sexpr((SExpr*)sexpr->cdr));
   case SE_INT:
-    return format("%d", (int)sexpr->car);
+    return format("%d %s", (int)sexpr->car, inspect_sexpr((SExpr*)sexpr->cdr));
   case SE_FLOAT:
     //return format("%f", (float)sexpr->car);
     return "";

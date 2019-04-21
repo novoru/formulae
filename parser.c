@@ -48,9 +48,8 @@ static SExpr *parse_expr(Parser *p) {
       return new_sexpr_nil();
     }
 
-    SExpr *expr = new_sexpr(new_sexpr_nil(), new_sexpr_nil());
+    SExpr *expr = parse_expr(p);
     
-    expr->car = parse_expr(p);
     next_token_parser(p);
 
     while(p->curTok->kind != TOK_RPAREN && p->curTok->kind != TOK_EOF) {

@@ -13,9 +13,8 @@ void repl() {
     Lexer *l = new_lexer(input);
     Parser *p = new_parser(l);
     SExpr *sexpr = parse_sexpr(p);
-    SExpr *result = eval(sexpr);
 
     if(sexpr != NULL)
-      printf("%s\n", inspect_sexpr(result));
+      printf("%s\n", inspect_sexpr(sexpr));
   }
 }
