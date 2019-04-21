@@ -70,10 +70,8 @@ static SExpr *parse_expr(Parser *p) {
   case TOK_NUM:
     return parse_int(p);
   default:
-    break;
+    return new_sexpr_nil();
   }
-
-  return NULL;
 }
 
 static SExpr *parse_list(Parser *p) {

@@ -91,34 +91,17 @@ typedef enum {
 
 typedef struct SExpr{
   SExprKind kind;
-  union {
-    // list
-    struct {
-      struct SExpr *car;
-      struct SExpr *cdr;
-    };
-
-    // symbol
-    Token *symbol;
-
-    // string
-    char *str;
-
-    // integer
-    int num;
-
-    // float
-    float fnum;
-  };
+  void *car;
+  void *cdr;
 } SExpr;
 
-SExpr *new_sexpr(SExpr *car, SExpr *cdr);
+SExpr *new_sexpr();
 SExpr *new_sexpr_symbol(Token *tok);
-SExpr *new_sexpr_str(char *str);
+SExpr *new_sexpr_str(char *src);
 SExpr *new_sexpr_int(int num);
 SExpr *new_sexpr_float(float fnum);
 SExpr *new_sexpr_nil();
-void sexpr_append(SExpr *sepxr, SExpr *cdr);
+void sexpr_append(SExpr *sexpr, SExpr *cdr);
 char *inspect_sexpr(SExpr *sexpr);
 
 // parser.c
@@ -134,5 +117,8 @@ SExpr *parse_sexpr(Parser *p);
 
 // repl.c
 void repl();
+
+// eval.c
+SExpr *eval(SExpr *sexpr);
 
 #endif
