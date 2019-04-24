@@ -79,30 +79,63 @@ typedef struct Lexer{
 Lexer *new_lexer(char *src);
 Token *next_token_lexer(Lexer *l);
 
-// sexpr.c
+// obj.c
 typedef enum {
-  SE_LIST,
-  SE_SYMBOL,
-  SE_STRING,
-  SE_INT,
-  SE_FLOAT,
-  SE_NIL,
-} SExprKind;
+  OBJ_PAIR,
+  OBJ_SYMBOL,
+  OBJ_STRING,
+  OBJ_NUM,
+  OBJ_FLOAT,
+  OBJ_NIL,
+} ObjKind;
 
-typedef struct SExpr{
-  SExprKind kind;
-  void *car;
-  void *cdr;
-} SExpr;
+typedef struct Object{
+  ObjKind kind;
 
-SExpr *new_sexpr();
-SExpr *new_sexpr_symbol(Token *tok);
-SExpr *new_sexpr_str(char *src);
-SExpr *new_sexpr_int(int num);
-SExpr *new_sexpr_float(float fnum);
-SExpr *new_sexpr_nil();
-void sexpr_append(SExpr *sexpr, void *cdr);
-char *inspect_sexpr(SExpr *sexpr);
+  union {
+    // pair
+    struct {
+      struct Object *car;
+      struct Object *cdr;
+    };
+
+    // symbol
+    Token *tok;
+
+    // string
+    char *str;
+
+    // number
+    int num;
+
+    // floating point number
+    float fnum;
+  };
+  
+} Object;
+
+#define FML_CAR(obj)        (obj->car)
+#define FML_CDR(obj)        (obj->cdr)
+#define FML_CAAR(obj)       (FML_CAR(FML_CAR(obj)))
+#define FML_CADR(obj)       (FML_CAR(FML_CDR(obj)))
+#define FML_CDAR(obj)       (FML_CDR(FML_CAR(obj)))
+#define FML_CDDR(obj)       (FML_CDR(FML_CDR(obj)))
+#define FML_PAIR(car, cdr)  (new_obj_pair(car, cdr))
+#define FML_SYMBOL(tok)     (new_obj_symbol(tok))
+#define FML_STR(str)        (new_obj_str(str))
+#define FML_NUM(num)        (new_obj_num(num))
+#define FML_FLOAT(fnum)     (new_obj_float(fnum))
+#define FML_NIL()           (new_obj_nil())
+
+Object *new_obj_pair(Object *car, Object *cdr);
+Object *new_obj_symbol(Token *tok);
+Object *new_obj_str(char *s);
+Object *new_obj_num(int n);
+Object *new_obj_float(float f);
+Object *new_obj_nil();
+void obj_append(Object *obj, Object *cdr);
+char *inspect_obj(Object *obj);
+Object *apply_proc(Object *proc, Object *list);
 
 // parser.c
 typedef struct Parser{
@@ -113,12 +146,12 @@ typedef struct Parser{
 
 Parser *new_parser(Lexer *l);
 void next_token_parser(Parser *p);
-SExpr *parse_sexpr(Parser *p);
+Object *parse_sexpr(Parser *p);
 
 // repl.c
 void repl();
 
 // eval.c
-SExpr *eval(SExpr *sexpr);
+Object *eval(Object *sexpr);
 
 #endif

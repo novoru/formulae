@@ -10,6 +10,7 @@ int main(int argc, char **argv) {
   if(argc == 2 && !strcmp(argv[1], "-test")) {
     test_util();
     test_lexer();
+    test_object();
     test_parser();
     exit(0);
   }

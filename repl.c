@@ -11,10 +11,5 @@ void repl() {
     add_history(input);
 
     Lexer *l = new_lexer(input);
-    Parser *p = new_parser(l);
-    SExpr *sexpr = parse_sexpr(p);
-
-    if(sexpr != NULL)
-      printf("%s\n", inspect_sexpr(sexpr));
   }
 }
