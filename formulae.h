@@ -3,8 +3,9 @@
 
 #include <stddef.h>
 #include "formulae.h"
+#include "util.h"
 
-// token.c
+/*-- token.c --*/
 typedef enum {
   TOK_ILLEGAL = 256,
   TOK_EOF,
@@ -70,7 +71,7 @@ typedef struct Token{
 Token *new_token(TokenKind kind, char *lit);
 char *inspect_token_kind(TokenKind kind);
 
-// lexer.c
+/*-- lexer.c --*/
 typedef struct Lexer{
   char *src;
   size_t pos;
@@ -79,7 +80,7 @@ typedef struct Lexer{
 Lexer *new_lexer(char *src);
 Token *next_token_lexer(Lexer *l);
 
-// obj.c
+/*-- object.c --*/
 typedef enum {
   OBJ_PAIR,
   OBJ_SYMBOL,
@@ -114,18 +115,31 @@ typedef struct Object{
   
 } Object;
 
-#define FML_CAR(obj)        (obj->car)
-#define FML_CDR(obj)        (obj->cdr)
-#define FML_CAAR(obj)       (FML_CAR(FML_CAR(obj)))
-#define FML_CADR(obj)       (FML_CAR(FML_CDR(obj)))
-#define FML_CDAR(obj)       (FML_CDR(FML_CAR(obj)))
-#define FML_CDDR(obj)       (FML_CDR(FML_CDR(obj)))
+// constructor
 #define FML_PAIR(car, cdr)  (new_obj_pair(car, cdr))
 #define FML_SYMBOL(tok)     (new_obj_symbol(tok))
 #define FML_STR(str)        (new_obj_str(str))
 #define FML_NUM(num)        (new_obj_num(num))
 #define FML_FLOAT(fnum)     (new_obj_float(fnum))
 #define FML_NIL()           (new_obj_nil())
+
+// utility
+#define FML_CAR(obj)        (obj->car)
+#define FML_CDR(obj)        (obj->cdr)
+#define FML_CAAR(obj)       (FML_CAR(FML_CAR(obj)))
+#define FML_CADR(obj)       (FML_CAR(FML_CDR(obj)))
+#define FML_CDAR(obj)       (FML_CDR(FML_CAR(obj)))
+#define FML_CDDR(obj)       (FML_CDR(FML_CDR(obj)))
+#define IS_PAIR(obj)        (obj->kind == OBJ_PAIR)
+#define IS_SYMBOL(obj)      (obj->kind == OBJ_SYMBOL)
+#define IS_STRING(obj)      (obj->kind == OBJ_STRING)
+#define IS_NUM(obj)         (obj->kind == OBJ_NUM)
+#define IS_FNUM(obj)        (obj->kind == OBJ_FNUM)
+#define IS_NIL(obj)         (obj->kind == OBJ_NIL)
+
+typedef Object* (*Proc)(Object *list);
+
+Map *proctbl;
 
 Object *new_obj_pair(Object *car, Object *cdr);
 Object *new_obj_symbol(Token *tok);
@@ -135,9 +149,11 @@ Object *new_obj_float(float f);
 Object *new_obj_nil();
 void obj_append(Object *obj, Object *cdr);
 char *inspect_obj(Object *obj);
-Object *apply_proc(Object *proc, Object *list);
+void register_proc(char *symbol, void *proc);
+void *get_proc(char *symbol);
+Object *apply_proc(char *symbol, Object *list);
 
-// parser.c
+/*-- parser.c --*/
 typedef struct Parser{
   Lexer *l;
   Token *curTok;
@@ -148,10 +164,10 @@ Parser *new_parser(Lexer *l);
 void next_token_parser(Parser *p);
 Object *parse_sexpr(Parser *p);
 
-// repl.c
+/*-- repl.c --*/
 void repl();
 
-// eval.c
+/*-- eval.c --*/
 Object *eval(Object *sexpr);
 
 #endif

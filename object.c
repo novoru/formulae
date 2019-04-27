@@ -52,17 +52,45 @@ void obj_append(Object *obj, Object *cdr) {
 }
 
 char *inspect_obj(Object *obj) {
-  char *s = "";
-
-  return s;
+  switch (obj->kind) {
+  case OBJ_PAIR:
+    return format("(%s . %s)", inspect_obj(obj->car), inspect_obj(obj->cdr));
+  case OBJ_SYMBOL:
+    return obj->tok->lit;
+  case OBJ_STRING:
+    return obj->str;
+  case OBJ_NUM:
+    return format("%d", obj->num);
+  case OBJ_FLOAT:
+    return format("%l", obj->fnum);
+  case OBJ_NIL:
+    return "()";
+  default:
+    return "";
+  }
 }
 
-Object *apply_proc(Object *proc, Object *list) {
-  Object *result = malloc(sizeof(Object));
+void init_proctbl() {
+  proctbl = new_map();
+}
 
-  // ToDo
-  // Object *(*func)(Object *) = map_get(proc);
-  // result = func(list);
+void register_proc(char *symbol, void *proc) {
+  map_push(proctbl, symbol, (void *)proc);
+}
+
+void *get_proc(char *symbol) {
+  return (void *)map_get(proctbl, symbol);
+}
+
+Object *apply_proc(char *symbol, Object *list) {
+  Object *result = malloc(sizeof(Object));
+  /*
+    ToDo:
+    need to add builtin function to symbol map
+  */
+  
+  Object *(*proc)(Object *) = map_get(proctbl, symbol);
+  result = proc(list);
   
   return result;
 }
