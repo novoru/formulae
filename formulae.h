@@ -130,6 +130,12 @@ typedef struct Object{
 #define FML_CADR(obj)       (FML_CAR(FML_CDR(obj)))
 #define FML_CDAR(obj)       (FML_CDR(FML_CAR(obj)))
 #define FML_CDDR(obj)       (FML_CDR(FML_CDR(obj)))
+#define FML_CADDR(obj)      (FML_CAR(FML_CDDR(obj)))
+#define FML_CDDDR(obj)      (FML_CDR(FML_CDDR(obj)))
+#define FML_CADDDR(obj)     (FML_CAR(FML_CDDDR(obj)))
+#define FML_CDDDDR(obj)     (FML_CDR(FML_CDDDR(obj)))
+#define FML_CADDDDR(obj)    (FML_CAR(FML_CDDDDR(obj)))
+#define FML_CDDDDDR(obj)    (FML_CDR(FML_CDDDDR(obj)))
 #define IS_PAIR(obj)        (obj->kind == OBJ_PAIR)
 #define IS_SYMBOL(obj)      (obj->kind == OBJ_SYMBOL)
 #define IS_STRING(obj)      (obj->kind == OBJ_STRING)
@@ -147,11 +153,11 @@ Object *new_obj_str(char *s);
 Object *new_obj_num(int n);
 Object *new_obj_float(float f);
 Object *new_obj_nil();
-void obj_append(Object *obj, Object *cdr);
+Object *append(Object *list, Object *cdr);
 char *inspect_obj(Object *obj);
+void init_proctbl();
 void register_proc(char *symbol, void *proc);
 void *get_proc(char *symbol);
-Object *apply_proc(char *symbol, Object *list);
 
 /*-- parser.c --*/
 typedef struct Parser{
@@ -162,7 +168,7 @@ typedef struct Parser{
 
 Parser *new_parser(Lexer *l);
 void next_token_parser(Parser *p);
-Object *parse_sexpr(Parser *p);
+Object *parse_expr(Parser *p);
 
 /*-- repl.c --*/
 void repl();

@@ -175,10 +175,39 @@ static void test_inspect_obj() {
   expect_str(__FILE__, __LINE__, inspect_obj(obj), "(+ . (1 . (2 . (3 . ()))))");
 }
 
+static void test_append() {
+  // (1 2 3)
+  Object *obj1 = FML_PAIR(FML_NUM(1),
+			  FML_PAIR(FML_NUM(2),
+				   FML_PAIR(FML_NUM(3),
+					    FML_NIL()
+					    )
+				   )
+			  );
+
+  // (4 5)
+  Object *obj2 = FML_PAIR(FML_NUM(4),
+			  FML_PAIR(FML_NUM(5),
+				   FML_NIL()
+				   )
+			  );
+
+  // (1 2 3 4 5)
+  Object *concat = append(obj1, obj2);
+
+  expect_obj_num(__FILE__, __LINE__, FML_CAR(concat), 1);
+  expect_obj_num(__FILE__, __LINE__, FML_CADR(concat), 2);
+  expect_obj_num(__FILE__, __LINE__, FML_CADDR(concat), 3);
+  expect_obj_num(__FILE__, __LINE__, FML_CADDDR(concat), 4);
+  expect_obj_num(__FILE__, __LINE__, FML_CADDDDR(concat), 5);
+  expect_obj_nil(__FILE__, __LINE__, FML_CDDDDDR(concat));
+}
+
 void test_object() {
   printf("*test_object*\n");
   test_sexpr();
   test_proc();
   test_inspect_obj();
+  test_append();
   printf("OK\n");
 }

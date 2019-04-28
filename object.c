@@ -48,7 +48,11 @@ Object *new_obj_nil() {
   return nil;
 }
 
-void obj_append(Object *obj, Object *cdr) {
+Object *append(Object *list, Object *cdr) {
+  if(IS_NIL(list))
+    return cdr;
+  else
+    return FML_PAIR(FML_CAR(list), append(FML_CDR(list), cdr));
 }
 
 char *inspect_obj(Object *obj) {
@@ -80,17 +84,4 @@ void register_proc(char *symbol, void *proc) {
 
 void *get_proc(char *symbol) {
   return (void *)map_get(proctbl, symbol);
-}
-
-Object *apply_proc(char *symbol, Object *list) {
-  Object *result = malloc(sizeof(Object));
-  /*
-    ToDo:
-    need to add builtin function to symbol map
-  */
-  
-  Object *(*proc)(Object *) = map_get(proctbl, symbol);
-  result = proc(list);
-  
-  return result;
 }
