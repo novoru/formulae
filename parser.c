@@ -38,6 +38,8 @@ static Object *parse_sexpr(Parser *p) {
     while(1) {
       if(p->curTok->kind == TOK_RPAREN)
 	return obj;
+      else if(p->curTok->kind == TOK_EOF) // TODO: error handling
+	return NULL;
       else {
 	obj = append(obj, FML_PAIR(parse_sexpr(p), FML_NIL()));
       }
@@ -48,6 +50,6 @@ static Object *parse_sexpr(Parser *p) {
   case TOK_NUM:
     return new_obj_num(atoi(p->curTok->lit));
   default:
-    return NULL;
+    return NULL; // TODO: error handling
   }
 }
