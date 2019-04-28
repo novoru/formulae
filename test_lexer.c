@@ -13,58 +13,6 @@ static void expect_token(char *file, int line, Token *tok, TokenKind kind, char 
   }
 }
 
-static void test_op() {
-  char *src = "+-*/<><=>=";
-  Lexer *l = new_lexer(src);
-
-  Token *plus = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, plus, TOK_PLUS, "+");
-
-  Token *minus = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, minus, TOK_MINUS, "-");
-  
-  Token *asterisk = next_token_lexer(l); 
-  expect_token(__FILE__, __LINE__, asterisk, TOK_ASTERISK, "*");
-  
-  Token *slash = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, slash, TOK_SLASH, "/");
-
-  Token *lt = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, lt, TOK_LT, "<");
-
-  Token *gt = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, gt, TOK_GT, ">");
-
-  Token *lte = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, lte, TOK_LTE, "<=");
-
-  Token *gte = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, gte, TOK_GTE, ">=");
-}
-
-static void test_skip() {
-  char *src = "+ -\n*\t/<\r>";
-  Lexer *l = new_lexer(src);
-
-  Token *plus = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, plus, TOK_PLUS, "+");
-
-  Token *minus = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, minus, TOK_MINUS, "-");
-  
-  Token *asterisk = next_token_lexer(l); 
-  expect_token(__FILE__, __LINE__, asterisk, TOK_ASTERISK, "*");
-  
-  Token *slash = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, slash, TOK_SLASH, "/");
-
-  Token *lt = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, lt, TOK_LT, "<");
-
-  Token *gt = next_token_lexer(l);
-  expect_token(__FILE__, __LINE__, gt, TOK_GT, ">");
-}
-
 static void test_int() {
   char *src = "0 10 100 1000";
   Lexer *l = new_lexer(src);
@@ -108,9 +56,22 @@ static void test_eof() {
   expect_token(__FILE__, __LINE__, eof, TOK_EOF, "\0");  
 }
 
+
 static void test_keyword() {
-  char *src = "lambda define let letrec do quote car cdr and or if cond #t #f nil";
+  char *src = "+ - * / lambda define let letrec do quote car cdr and or if cond #t #f nil";
   Lexer *l = new_lexer(src);
+
+  Token *plus = next_token_lexer(l);
+  expect_token(__FILE__, __LINE__, plus, TOK_IDENT, "+");  
+
+  Token *minus = next_token_lexer(l);
+  expect_token(__FILE__, __LINE__, minus, TOK_IDENT, "-");  
+
+  Token *mult = next_token_lexer(l);
+  expect_token(__FILE__, __LINE__, mult, TOK_IDENT, "*");  
+
+  Token *divide = next_token_lexer(l);
+  expect_token(__FILE__, __LINE__, divide, TOK_IDENT, "/");  
 
   Token *lambda = next_token_lexer(l);
   expect_token(__FILE__, __LINE__, lambda, TOK_IDENT, "lambda");  
@@ -157,8 +118,6 @@ static void test_keyword() {
 
 void test_lexer() {
   printf("*test_lexer*\n");
-  test_op();
-  test_skip();
   test_int();
   test_ident();
   test_eof();

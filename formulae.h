@@ -13,19 +13,6 @@ typedef enum {
   TOK_IDENT,    
   TOK_NUM,
 
-  TOK_ASSIGN,   // =
-  TOK_PLUS,     // +
-  TOK_MINUS,    // -
-  TOK_BANG,     // !
-  TOK_ASTERISK, // *
-  TOK_SLASH,    // /
-  TOK_DOT,      // .
-
-  TOK_LT,       // <
-  TOK_LTE,      // <=
-  TOK_GT,       // >
-  TOK_GTE,      // >=
-  
   TOK_LPAREN,   // (
   TOK_RPAREN,   // )
 
@@ -42,25 +29,10 @@ typedef enum {
   TOK_RBRACKET,     // ]
   TOK_SHARP,        // #
 
-  TOK_LAMBDA,   // lambda
-  TOK_DEFINE,   // define
-  TOK_LET,      // let
-  TOK_LETREC,   // letrec
-  TOK_DO,       // do
-  TOK_QUOTE,    // quote
-
-  TOK_CAR,      // car
-  TOK_CDR,      // cdr
-  
-  TOK_AND,      // and
-  TOK_OR,       // or
-
   TOK_TRUE,     // #t
   TOK_FALSE,    // #f
   TOK_NIL,      // nil
   
-  TOK_IF,       // if
-  TOK_COND,     // cond
 } TokenKind;
 
 typedef struct Token{

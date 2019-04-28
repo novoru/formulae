@@ -18,6 +18,7 @@ char *inspect_token_kind(TokenKind kind) {
   case TOK_NUM:
     s = "TOK_NUM";
     break;
+  /*
   case TOK_ASSIGN:
     s = "TOK_ASSIGN('=')";
     break;
@@ -51,6 +52,7 @@ char *inspect_token_kind(TokenKind kind) {
   case TOK_GTE:
     s = "TOK_GTE('>=')";
     break;
+  */
   case TOK_LPAREN:
     s = "TOK_LPAREN('(')";
     break;

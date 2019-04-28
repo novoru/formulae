@@ -44,45 +44,8 @@ char *read_ident(Lexer *l) {
 Token *next_token_lexer(Lexer *l) {
   skip(l);
   Token *tok;
-  
+
   switch(l->src[l->pos]) {
-  case '=':
-    tok = new_token(TOK_ASSIGN, "=");
-    break;
-  case '+':
-    tok = new_token(TOK_PLUS, "+");
-    break;
-  case '-':
-    tok = new_token(TOK_MINUS, "-");
-    break;
-  case '!':
-    tok = new_token(TOK_BANG, "!");
-    break;
-  case '*':
-    tok = new_token(TOK_ASTERISK, "*");
-    break;
-  case '/':
-    tok = new_token(TOK_SLASH, "/");
-    break;
-  case '.':
-    tok = new_token(TOK_DOT, ".");
-    break;
-  case '<':
-    if(l->src[l->pos+1] == '=') {
-      tok = new_token(TOK_LTE, "<=");
-      l->pos++;
-    }
-    else
-      tok = new_token(TOK_LT, "<");
-    break;
-  case '>':
-    if(l->src[l->pos+1] == '=') {
-      tok = new_token(TOK_GTE, ">=");
-      l->pos++;
-    }
-    else
-      tok = new_token(TOK_GT, ">");
-    break;
   case '(':
     tok = new_token(TOK_LPAREN, "(");
     break;
@@ -131,10 +94,6 @@ Token *next_token_lexer(Lexer *l) {
       tok = new_token(TOK_FALSE, "#f");
       l->pos++;
     }
-    /* TODO: vector
-    else if(l->src[l->pos] == '(')
-     tok = new_token(TOK_VECTOR, "#(");
-    */
     else
       tok = new_token(TOK_SHARP, "#");
     break;
@@ -147,7 +106,7 @@ Token *next_token_lexer(Lexer *l) {
       tok = new_token(TOK_NUM, lit);
       return tok;
     }
-    else if(isalpha(l->src[l->pos])) {
+    else if(isalpha(l->src[l->pos]) || strchr("!$%&*+-./:<=>?@^_~", l->src[l->pos])) {
       char *lit = read_ident(l);
       tok = new_token(TOK_IDENT, lit);
       return tok;

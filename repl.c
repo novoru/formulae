@@ -11,5 +11,10 @@ void repl() {
     add_history(input);
 
     Lexer *l = new_lexer(input);
+    Parser *p = new_parser(l);
+    Object *obj = parse_expr(p);
+
+    if(obj != NULL)
+      printf("%s\n", inspect_obj(obj));
   }
 }

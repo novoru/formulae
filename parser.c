@@ -23,7 +23,7 @@ Object *parse_expr(Parser *p) {
   Object *obj = new_obj_nil();
   
   while(p->curTok->kind != TOK_EOF) {
-    parse_sexpr(p);
+    obj = parse_sexpr(p);
     next_token_parser(p);
   }
 
@@ -33,11 +33,15 @@ Object *parse_expr(Parser *p) {
 static Object *parse_sexpr(Parser *p) {
   switch(p->curTok->kind) {
   case TOK_LPAREN:
-    ;
-    Object *obj = FML_PAIR(FML_NIL(), FML_NIL());
+    next_token_parser(p);
+    Object *obj = FML_NIL();
     while(1) {
       if(p->curTok->kind == TOK_RPAREN)
 	return obj;
+      else {
+	obj = append(obj, FML_PAIR(parse_sexpr(p), FML_NIL()));
+      }
+      next_token_parser(p);
     }
   case TOK_IDENT:
     return new_obj_symbol(p->curTok);
