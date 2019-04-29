@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "formulae.h"
 
 static void test_eval_builtin() {

@@ -117,7 +117,9 @@ typedef struct Object{
 
 typedef Object* (*Proc)(Object *list);
 
-Map *proctbl;
+// global scope
+Map *proctbl;  // procedure
+Map *vartbl;   // variable
 
 Object *new_obj_pair(Object *car, Object *cdr);
 Object *new_obj_symbol(Token *tok);
@@ -127,15 +129,18 @@ Object *new_obj_float(float f);
 Object *new_obj_nil();
 Object *append(Object *list, Object *cdr);
 char *inspect_obj(Object *obj);
+char *inspect_obj_kind(Object *obj);
 void init_proctbl();
 void register_proc(char *symbol, void *proc);
 void *get_proc(char *symbol);
 
 /*-- builtin.c --*/
-Object *plus(Object *list);
-Object *minus(Object *list);
-Object *mult(Object *list);
-Object *divide(Object *list);
+Object *builtin_add(Object *list);
+Object *builtin_sub(Object *list);
+Object *builtin_mult(Object *list);
+Object *builtin_div(Object *list);
+Object *builtin_car(Object *list);
+Object *builtin_cdr(Object *list);
 
 /*-- parser.c --*/
 typedef struct Parser{

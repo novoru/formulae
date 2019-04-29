@@ -23,16 +23,18 @@ Object *eval(Object *obj) {
 
 static Object *eval_pair(Object *car, Object *cdr) {
   Object *obj = FML_NIL();
-
+  
   if(IS_SYMBOL(car)) {
     Object* (*proc)(Object *) = get_proc(car->tok->lit);
-    if(proc != NULL)
+    if(proc != NULL && cdr != NULL) {
+      printf("(%s:%d):%s\n", __FILE__, __LINE__, inspect_obj(cdr));
       obj = proc(cdr);
-    else  // TODO: error handling
-      return FML_NIL();
+    }
+    else
+      error("error: unknown symbol\n");
   }
   else
     obj = FML_PAIR(car, cdr);
-  
+
   return obj;
 }

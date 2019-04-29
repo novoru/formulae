@@ -74,13 +74,35 @@ char *inspect_obj(Object *obj) {
   }
 }
 
+char *inspect_obj_kind(Object *obj) {
+  switch (obj->kind) {
+  case OBJ_PAIR:
+    return "PAIR";
+  case OBJ_SYMBOL:
+    return "SYMBOL";
+  case OBJ_STRING:
+    return "STRING";
+  case OBJ_NUM:
+    return "NUM";
+  case OBJ_FLOAT:
+    return "FLOAT";
+  case OBJ_NIL:
+    return "NIL";
+  default:
+    return format("ILLEGAL: %d", obj->kind);
+  }
+}
+
 void init_proctbl() {
   proctbl = new_map();
 
-  register_proc("+", (void *)plus);
-  register_proc("-", (void *)minus);
-  register_proc("*", (void *)mult);
-  register_proc("/", (void *)divide);
+  register_proc("+", (void *)builtin_add);
+  register_proc("-", (void *)builtin_sub);
+  register_proc("*", (void *)builtin_mult);
+  register_proc("/", (void *)builtin_div);
+
+  register_proc("car", (void *)builtin_car);
+  register_proc("cdr", (void *)builtin_cdr);
 }
 
 void register_proc(char *symbol, void *proc) {

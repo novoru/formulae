@@ -36,55 +36,6 @@ static void expect_obj_str(char *file, int line, Object *obj, char *str) {
     exit(1);
   }
 }
-/*
-static Object *plus(Object *list) {
-  Object *result = new_obj_num(FML_CAR(list)->num);
-  Object *cdr = FML_CDR(list);
-  
-  while(!IS_NIL(cdr)) {
-    result->num += FML_CAR(cdr)->num;
-    cdr = FML_CDR(cdr);
-  }
-    
-  return result;
-}
-
-static Object *minus(Object *list) {
-  Object *result = new_obj_num(FML_CAR(list)->num);
-  Object *cdr = FML_CDR(list);
-  
-  while(!IS_NIL(cdr)) {
-    result->num -= FML_CAR(cdr)->num;
-    cdr = FML_CDR(cdr);
-  }
-    
-  return result;
-}
-
-static Object *mult(Object *list) {
-  Object *result = new_obj_num(FML_CAR(list)->num);
-  Object *cdr = FML_CDR(list);
-  
-  while(!IS_NIL(cdr)) {
-    result->num *= FML_CAR(cdr)->num;
-    cdr = FML_CDR(cdr);
-  }
-    
-  return result;
-}
-
-static Object *divide(Object *list) {
-  Object *result = new_obj_num(FML_CAR(list)->num);
-  Object *cdr = FML_CDR(list);
-  
-  while(!IS_NIL(cdr)) {
-    result->num /= FML_CAR(cdr)->num;
-    cdr = FML_CDR(cdr);
-  }
-    
-  return result;
-}
-*/
 
 static void test_sexpr() {
   Object *obj = FML_PAIR(
@@ -108,7 +59,7 @@ static void test_proc() {
 			 );
   
   init_proctbl();
-  register_proc(FML_CAR(obj)->str, (void *)plus);
+  register_proc(FML_CAR(obj)->str, (void *)builtin_add);
   Object* (*proc)(Object *) = get_proc(FML_CAR(obj)->str);
   Object *result = proc(FML_CDR(obj));
 
@@ -124,7 +75,7 @@ static void test_proc() {
 			  )
 		 );
   
-  register_proc(FML_CAR(obj)->str, (void *)minus);
+  register_proc(FML_CAR(obj)->str, (void *)builtin_sub);
   proc = get_proc(FML_CAR(obj)->str);
   result = proc(FML_CDR(obj));
 
@@ -140,7 +91,7 @@ static void test_proc() {
 			  )
 		 );
   
-  register_proc(FML_CAR(obj)->str, (void *)mult);
+  register_proc(FML_CAR(obj)->str, (void *)builtin_mult);
   proc = get_proc(FML_CAR(obj)->str);
   result = proc(FML_CDR(obj));
 
@@ -156,7 +107,7 @@ static void test_proc() {
 			  )
 		 );
   
-  register_proc(FML_CAR(obj)->str, (void *)divide);
+  register_proc(FML_CAR(obj)->str, (void *)builtin_div);
   proc = get_proc(FML_CAR(obj)->str);
   result = proc(FML_CDR(obj));
 

@@ -43,7 +43,7 @@ static Object *parse_sexpr(Parser *p) {
       if(p->curTok->kind == TOK_RPAREN)
 	return obj;
       else if(p->curTok->kind == TOK_EOF) // TODO: error handling
-	return NULL;
+	error("error: reach to EOF\n");
       else
 	obj = append(obj, FML_PAIR(parse_sexpr(p), FML_NIL()));
       next_token_parser(p);

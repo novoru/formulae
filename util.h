@@ -1,6 +1,10 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#include <stdnoreturn.h>
+
+noreturn error(char *fmt, ...);
+
 // formatter
 char *format(char *fmt, ...);
 

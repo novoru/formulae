@@ -4,6 +4,14 @@
 #include <string.h>
 #include "util.h"
 
+noreturn error(char *fmt, ...) {
+  va_list ap;
+  va_start(ap, fmt);
+  vfprintf(stderr, fmt, ap);
+  fprintf(stderr, "\n");
+  exit(1);
+}
+
 char *format(char *fmt, ...) {
   char buf[2048];
   va_list ap;
@@ -20,7 +28,7 @@ char *substr(char *str, size_t start, size_t len) {
   
   char *subs = malloc(sizeof(char)*len+1);
   strncpy(subs, str+start, len);
-  subs[len + 1] = '\0';
+  subs[len] = '\0';
 
   return subs;
 }

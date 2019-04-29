@@ -26,7 +26,7 @@ char *read_num(Lexer *l) {
       break;
     }
   }
-  
+
   return substr(l->src, start, l->pos-start);
 }
 
@@ -99,14 +99,14 @@ Token *next_token_lexer(Lexer *l) {
     break;
   case '\0':
     tok = new_token(TOK_EOF, "\0");
-    return tok;
+    return tok;    
   default:
     if(isdigit(l->src[l->pos])) {
       char *lit = read_num(l);
       tok = new_token(TOK_NUM, lit);
       return tok;
     }
-    else if(isalpha(l->src[l->pos]) || strchr("!$%&*+-./:<=>?@^_~", l->src[l->pos])) {
+    else if(isalnum(l->src[l->pos]) || strchr("!$%&*+-./:<=>?@^_~", l->src[l->pos])) {
       char *lit = read_ident(l);
       tok = new_token(TOK_IDENT, lit);
       return tok;

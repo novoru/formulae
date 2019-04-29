@@ -15,7 +15,10 @@ void repl() {
     Object *obj = parse_expr(p);
     Object *result = eval(obj);
 
-    if(result != NULL)
-      printf("%s\n", inspect_obj(result));
+    if(obj != NULL) {
+      printf("%s\n", inspect_obj(obj));
+      if(result != NULL)
+	printf("%s\n", inspect_obj(result));
+    }
   }
 }
