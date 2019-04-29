@@ -12,6 +12,7 @@ int main(int argc, char **argv) {
     test_lexer();
     test_object();
     test_parser();
+    test_eval();
     exit(0);
   }
 
