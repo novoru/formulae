@@ -46,6 +46,42 @@ static void test_eval_builtin() {
   result = eval(obj);
 
   expect_str(__FILE__, __LINE__, inspect_obj(result), "6");
+
+  // cons
+  src = "(cons 1 2)";
+  l = new_lexer(src);
+  p = new_parser(l);
+  obj = parse_expr(p);
+  result = eval(obj);
+
+  expect_str(__FILE__, __LINE__, inspect_obj(result), "(1 . 2)");
+
+  // car
+  src = "(car (1 2))";
+  l = new_lexer(src);
+  p = new_parser(l);
+  obj = parse_expr(p);
+  result = eval(obj);
+
+  expect_str(__FILE__, __LINE__, inspect_obj(result), "1");
+
+  // cdr
+  src = "(cdr (1 2))";
+  l = new_lexer(src);
+  p = new_parser(l);
+  obj = parse_expr(p);
+  result = eval(obj);
+
+  expect_str(__FILE__, __LINE__, inspect_obj(result), "(2 . ())");
+
+  // length
+  src = "(length ())";
+  l = new_lexer(src);
+  p = new_parser(l);
+  obj = parse_expr(p);
+  result = eval(obj);
+
+  expect_str(__FILE__, __LINE__, inspect_obj(result), "0");
 }
 
 void test_eval() {

@@ -92,6 +92,20 @@ Object *builtin_div(Object *list) {
   return result;
 }
 
+Object *builtin_length(Object *list) {
+  if(IS_NIL(FML_CAR(list)))
+    return FML_NUM(0);
+  
+  if(!IS_PAIR(FML_CAR(list)))
+    error("invalid argument:%s\n", inspect_obj_kind(FML_CAR(list)));
+
+  return FML_NUM(len_obj(FML_CAR(list)));
+}
+
+Object *builtin_cons(Object *list) {
+  return FML_PAIR(FML_CAR(list), FML_CADR(list));
+}
+
 Object *builtin_car(Object *list) {
   if(!IS_PAIR(FML_CAR(list)))
     error("invalid argument:%s\n", inspect_obj_kind(FML_CAR(list)));
@@ -100,8 +114,8 @@ Object *builtin_car(Object *list) {
 }
 
 Object *builtin_cdr(Object *list) {
-  if(!IS_PAIR(FML_CDR(list)))
-    error("invalid argument:%s\n", inspect_obj_kind(FML_CDR(list)));
+  if(!IS_PAIR(FML_CAR(list)))
+    error("invalid argument:%s\n", inspect_obj_kind(FML_CAR(list)));
 
   return FML_CDAR(list);
 }

@@ -26,10 +26,8 @@ static Object *eval_pair(Object *car, Object *cdr) {
   
   if(IS_SYMBOL(car)) {
     Object* (*proc)(Object *) = get_proc(car->tok->lit);
-    if(proc != NULL && cdr != NULL) {
-      printf("(%s:%d):%s\n", __FILE__, __LINE__, inspect_obj(cdr));
+    if(proc != NULL && cdr != NULL)
       obj = proc(cdr);
-    }
     else
       error("error: unknown symbol\n");
   }

@@ -139,8 +139,10 @@ Object *builtin_add(Object *list);
 Object *builtin_sub(Object *list);
 Object *builtin_mult(Object *list);
 Object *builtin_div(Object *list);
+Object *builtin_cons(Object *list);
 Object *builtin_car(Object *list);
 Object *builtin_cdr(Object *list);
+Object *builtin_length(Object *list);
 
 /*-- parser.c --*/
 typedef struct Parser{

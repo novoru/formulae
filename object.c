@@ -101,8 +101,10 @@ void init_proctbl() {
   register_proc("*", (void *)builtin_mult);
   register_proc("/", (void *)builtin_div);
 
+  register_proc("cons", (void *)builtin_cons);
   register_proc("car", (void *)builtin_car);
   register_proc("cdr", (void *)builtin_cdr);
+  register_proc("length", (void *)builtin_length);
 }
 
 void register_proc(char *symbol, void *proc) {
@@ -111,4 +113,19 @@ void register_proc(char *symbol, void *proc) {
 
 void *get_proc(char *symbol) {
   return (void *)map_get(proctbl, symbol);
+}
+
+int len_obj(Object *obj) {
+  if(IS_NIL(obj))
+    return 0;
+    
+  int len = 0;
+  Object *tmp = obj;
+  
+  while(IS_PAIR(tmp)) {
+    len++;
+    tmp = FML_CDR(tmp);
+  }
+
+  return len;
 }
