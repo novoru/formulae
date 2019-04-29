@@ -76,6 +76,11 @@ char *inspect_obj(Object *obj) {
 
 void init_proctbl() {
   proctbl = new_map();
+
+  register_proc("+", (void *)plus);
+  register_proc("-", (void *)minus);
+  register_proc("*", (void *)mult);
+  register_proc("/", (void *)divide);
 }
 
 void register_proc(char *symbol, void *proc) {

@@ -13,8 +13,9 @@ void repl() {
     Lexer *l = new_lexer(input);
     Parser *p = new_parser(l);
     Object *obj = parse_expr(p);
+    Object *result = eval(obj);
 
-    if(obj != NULL)
-      printf("%s\n", inspect_obj(obj));
+    if(result != NULL)
+      printf("%s\n", inspect_obj(result));
   }
 }

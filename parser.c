@@ -11,6 +11,8 @@ Parser *new_parser(Lexer *l) {
   next_token_parser(p);
   next_token_parser(p);
 
+  init_proctbl();
+  
   return p;
 }
 
@@ -34,15 +36,16 @@ static Object *parse_sexpr(Parser *p) {
   switch(p->curTok->kind) {
   case TOK_LPAREN:
     next_token_parser(p);
+
     Object *obj = FML_NIL();
+
     while(1) {
       if(p->curTok->kind == TOK_RPAREN)
 	return obj;
       else if(p->curTok->kind == TOK_EOF) // TODO: error handling
 	return NULL;
-      else {
+      else
 	obj = append(obj, FML_PAIR(parse_sexpr(p), FML_NIL()));
-      }
       next_token_parser(p);
     }
   case TOK_IDENT:

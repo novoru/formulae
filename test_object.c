@@ -36,7 +36,7 @@ static void expect_obj_str(char *file, int line, Object *obj, char *str) {
     exit(1);
   }
 }
-
+/*
 static Object *plus(Object *list) {
   Object *result = new_obj_num(FML_CAR(list)->num);
   Object *cdr = FML_CDR(list);
@@ -84,6 +84,7 @@ static Object *divide(Object *list) {
     
   return result;
 }
+*/
 
 static void test_sexpr() {
   Object *obj = FML_PAIR(

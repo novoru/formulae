@@ -131,6 +131,12 @@ void init_proctbl();
 void register_proc(char *symbol, void *proc);
 void *get_proc(char *symbol);
 
+/*-- builtin.c --*/
+Object *plus(Object *list);
+Object *minus(Object *list);
+Object *mult(Object *list);
+Object *divide(Object *list);
+
 /*-- parser.c --*/
 typedef struct Parser{
   Lexer *l;
@@ -146,6 +152,6 @@ Object *parse_expr(Parser *p);
 void repl();
 
 /*-- eval.c --*/
-Object *eval(Object *sexpr);
+Object *eval(Object *obj);
 
 #endif
