@@ -4,7 +4,7 @@
 #include <string.h>
 #include "util.h"
 
-noreturn error(char *fmt, ...) {
+noreturn void error(char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
   vfprintf(stderr, fmt, ap);

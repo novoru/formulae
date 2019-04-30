@@ -1,13 +1,13 @@
 #include <string.h>
 #include "formulae.h"
 
-static Object *eval_pair(Object *car, Object *cdr);
+static Object *eval_pair(Object *pair);
 static Object *eval_symbol(Object *obj);
 
 Object *eval(Object *obj) {
   switch(obj->kind) {
   case OBJ_PAIR:
-    return eval_pair(eval(FML_CAR(obj)), eval(FML_CDR(obj)));
+    return eval_pair(obj);
   case OBJ_SYMBOL:
     return obj;
   case OBJ_STRING:
@@ -21,18 +21,18 @@ Object *eval(Object *obj) {
   }
 }
 
-static Object *eval_pair(Object *car, Object *cdr) {
-  Object *obj = FML_NIL();
-  
-  if(IS_SYMBOL(car)) {
-    Object* (*proc)(Object *) = get_proc(car->tok->lit);
-    if(proc != NULL && cdr != NULL)
-      obj = proc(cdr);
+static Object *eval_pair(Object *pair) {
+  if(IS_SYMBOL(FML_CAR(pair))) {
+    Object* (*proc)(Object *) = get_proc(FML_CAR(pair)->tok->lit);
+    if(proc != NULL) {
+      Object *cdr = eval(FML_CDR(pair));
+      if(len_obj(cdr) < 0)
+	error("error: invalid argument\n");
+      return proc(cdr);
+    }
     else
-      error("error: unknown symbol\n");
+      error("error: unknown symbol: '%s'\n", FML_CAR(pair)->tok->lit);
   }
   else
-    obj = FML_PAIR(car, cdr);
-
-  return obj;
+    return FML_PAIR(eval(FML_CAR(pair)), eval(FML_CDR(pair)));
 }

@@ -3,10 +3,10 @@
 
 #include <stdnoreturn.h>
 
-noreturn error(char *fmt, ...);
+noreturn void error(char *fmt, ...) __attribute__((format(printf, 1, 2)));
 
 // formatter
-char *format(char *fmt, ...);
+char *format(char *fmt, ...) __attribute__((format(printf, 1, 2)));
 
 // string
 char *substr(char *str, size_t start, size_t len);

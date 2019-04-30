@@ -2,6 +2,7 @@
 #define FORMULAE_H
 
 #include <stddef.h>
+#include <gc.h>
 #include "formulae.h"
 #include "util.h"
 
@@ -120,6 +121,11 @@ typedef Object* (*Proc)(Object *list);
 // global scope
 Map *proctbl;  // procedure
 Map *vartbl;   // variable
+
+enum {
+  FML_LIST_DOTTED = -1,
+  FML_LIST_CIRCULAR = -2,
+};
 
 Object *new_obj_pair(Object *car, Object *cdr);
 Object *new_obj_symbol(Token *tok);

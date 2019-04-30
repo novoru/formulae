@@ -116,16 +116,24 @@ void *get_proc(char *symbol) {
 }
 
 int len_obj(Object *obj) {
-  if(IS_NIL(obj))
-    return 0;
-    
-  int len = 0;
   Object *tmp = obj;
+  int len = 0;
   
-  while(IS_PAIR(tmp)) {
-    len++;
-    tmp = FML_CDR(tmp);
-  }
+  while(1){
+    if(IS_NIL(obj)) return len;
+    if(!IS_PAIR(obj)) return FML_LIST_DOTTED;
 
+    obj = FML_CDR(obj);
+    len++;
+
+    if(IS_NIL(obj)) return len;
+    if(!IS_PAIR(obj)) return FML_LIST_DOTTED;
+
+    obj = FML_CDR(obj);
+    tmp = FML_CDR(tmp);
+    if(obj == tmp) return FML_LIST_CIRCULAR;
+    len++;
+  }
+  
   return len;
 }
