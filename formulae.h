@@ -168,4 +168,16 @@ void repl();
 /*-- eval.c --*/
 Object *eval(Object *obj);
 
+/*-- env.c --*/ 
+typedef struct Env{
+  struct Env *outer;
+  Map *store;
+}Env;
+
+Env *new_env();
+Env *new_enclosed_env(Env *outer);
+Object *get_env(Env *env, char *name);
+Object *set_env(Env *env, char *name, Object *obj);
+char *inspect_env(Env *env);
+
 #endif

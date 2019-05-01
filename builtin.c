@@ -122,7 +122,6 @@ Object *builtin_cons(Object *list) {
   int len = len_obj(list);
   if(len != 2) {
     error("builtin error(%s:%d): invalid number of arguments: %d", __FILE__, __LINE__, len);
-    return NULL;
   }
   return FML_PAIR(FML_CAR(list), FML_CADR(list));
 }
@@ -130,7 +129,6 @@ Object *builtin_cons(Object *list) {
 Object *builtin_car(Object *list) {
   if(!IS_PAIR(FML_CAR(list))) {
     error("builtin error(%s:%d): invalid argument: '%s'", __FILE__, __LINE__, inspect_obj_kind(FML_CAR(list)));
-    return NULL;
   }
 
   return FML_CAAR(list);
@@ -139,7 +137,6 @@ Object *builtin_car(Object *list) {
 Object *builtin_cdr(Object *list) {
   if(!IS_PAIR(FML_CAR(list))) {
     error("builtin error(%s:%d): invalid argument: '%s'", __FILE__, __LINE__, inspect_obj_kind(FML_CAR(list)));
-    return NULL;
   }
 
   return FML_CDAR(list);
