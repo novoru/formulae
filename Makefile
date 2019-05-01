@@ -1,7 +1,7 @@
 CC=gcc
 SRCS=$(wildcard *.c)
 OBJS=$(SRCS:.c=.o)
-CFLAGS=-Wall -std=c11 -ledit
+CFLAGS=-Wall -std=c11 -ledit -lgc
 
 formulae: $(OBJS)
 	$(CC) -o $@ $(OBJS) $(CFLAGS)

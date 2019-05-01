@@ -4,12 +4,14 @@
 #include <string.h>
 #include "util.h"
 
+jmp_buf err_env;
+
 noreturn void error(char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
   vfprintf(stderr, fmt, ap);
   fprintf(stderr, "\n");
-  exit(1);
+  longjmp(err_env, ERR_ERROR);
 }
 
 char *format(char *fmt, ...) {

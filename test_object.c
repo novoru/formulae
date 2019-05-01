@@ -47,73 +47,6 @@ static void test_sexpr() {
   expect_obj_nil(__FILE__, __LINE__, FML_CDDR(obj));
 }
 
-static void test_proc() {
-  // (+ 1 2 3 ) = 6
-  Object *obj = FML_PAIR(FML_STR("+"), 
-			 FML_PAIR(FML_NUM(1),
-				  FML_PAIR(FML_NUM(2),
-					   FML_PAIR(FML_NUM(3),
-						    FML_NIL())
-					   )
-				  )
-			 );
-  
-  init_proctbl();
-  register_proc(FML_CAR(obj)->str, (void *)builtin_add);
-  Object* (*proc)(Object *) = get_proc(FML_CAR(obj)->str);
-  Object *result = proc(FML_CDR(obj));
-
-  expect_obj_num(__FILE__, __LINE__, result, 6);
-
-  // (- 5 3 1) = 1
-  obj = FML_PAIR(FML_STR("-"), 
-		 FML_PAIR(FML_NUM(5),
-			  FML_PAIR(FML_NUM(3),
-				   FML_PAIR(FML_NUM(1),
-					    FML_NIL())
-				   )
-			  )
-		 );
-  
-  register_proc(FML_CAR(obj)->str, (void *)builtin_sub);
-  proc = get_proc(FML_CAR(obj)->str);
-  result = proc(FML_CDR(obj));
-
-  expect_obj_num(__FILE__, __LINE__, result, 1);
-
-  // (* 1 2 3) = 6
-  obj = FML_PAIR(FML_STR("*"), 
-		 FML_PAIR(FML_NUM(1),
-			  FML_PAIR(FML_NUM(2),
-				   FML_PAIR(FML_NUM(3),
-					    FML_NIL())
-				   )
-			  )
-		 );
-  
-  register_proc(FML_CAR(obj)->str, (void *)builtin_mult);
-  proc = get_proc(FML_CAR(obj)->str);
-  result = proc(FML_CDR(obj));
-
-  expect_obj_num(__FILE__, __LINE__, result, 6);
-
-  // (/ 12 2 3) = 2
-  obj = FML_PAIR(FML_STR("/"), 
-		 FML_PAIR(FML_NUM(12),
-			  FML_PAIR(FML_NUM(2),
-				   FML_PAIR(FML_NUM(3),
-					    FML_NIL())
-				   )
-			  )
-		 );
-  
-  register_proc(FML_CAR(obj)->str, (void *)builtin_div);
-  proc = get_proc(FML_CAR(obj)->str);
-  result = proc(FML_CDR(obj));
-
-  expect_obj_num(__FILE__, __LINE__, result, 2);
-}
-
 static void test_inspect_obj() {
   Object *obj = FML_PAIR(FML_STR("+"), 
 			 FML_PAIR(FML_NUM(1),
@@ -158,7 +91,6 @@ static void test_append() {
 void test_object() {
   printf("*test_object*\n");
   test_sexpr();
-  test_proc();
   test_inspect_obj();
   test_append();
   printf("OK\n");

@@ -1,4 +1,5 @@
 #include <ctype.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "formulae.h"
@@ -8,6 +9,7 @@ static Object *parse_sexpr(Parser *p);
 Parser *new_parser(Lexer *l) {
   Parser *p = malloc(sizeof(Parser));
   p->l = l;
+
   next_token_parser(p);
   next_token_parser(p);
 
@@ -26,6 +28,7 @@ Object *parse_expr(Parser *p) {
   
   while(p->curTok->kind != TOK_EOF) {
     obj = parse_sexpr(p);
+    if(obj == NULL) return obj;
     next_token_parser(p);
   }
 
@@ -40,12 +43,18 @@ static Object *parse_sexpr(Parser *p) {
     Object *obj = FML_NIL();
 
     while(1) {
-      if(p->curTok->kind == TOK_RPAREN)
+      if(p->curTok->kind == TOK_RPAREN) {
 	return obj;
-      else if(p->curTok->kind == TOK_EOF) // TODO: error handling
-	error("error: reach to EOF\n");
-      else
-	obj = append(obj, FML_PAIR(parse_sexpr(p), FML_NIL()));
+      }
+      else if(p->curTok->kind == TOK_EOF) {
+	error("parse error(%s:%d): reach to EOF", __FILE__, __LINE__);
+	return NULL;
+      }
+      else {
+	Object *cdar = parse_sexpr(p);
+	if(cdar == NULL) return NULL;
+	obj = append(obj, FML_PAIR(cdar, FML_NIL()));
+      }
       next_token_parser(p);
     }
   case TOK_IDENT:

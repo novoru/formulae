@@ -2,9 +2,9 @@
 #define FORMULAE_H
 
 #include <stddef.h>
-#include <gc.h>
 #include "formulae.h"
 #include "util.h"
+
 
 /*-- token.c --*/
 typedef enum {
@@ -139,6 +139,7 @@ char *inspect_obj_kind(Object *obj);
 void init_proctbl();
 void register_proc(char *symbol, void *proc);
 void *get_proc(char *symbol);
+int len_obj(Object *obj);
 
 /*-- builtin.c --*/
 Object *builtin_add(Object *list);

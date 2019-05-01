@@ -18,6 +18,8 @@ Object *eval(Object *obj) {
     return obj;
   case OBJ_NIL:
     return obj;
+  default:
+    return obj;
   }
 }
 
@@ -27,11 +29,11 @@ static Object *eval_pair(Object *pair) {
     if(proc != NULL) {
       Object *cdr = eval(FML_CDR(pair));
       if(len_obj(cdr) < 0)
-	error("error: invalid argument\n");
+	error("evaluation error(%s:%d): invalid argument\n", __FILE__, __LINE__);
       return proc(cdr);
     }
     else
-      error("error: unknown symbol: '%s'\n", FML_CAR(pair)->tok->lit);
+      error("evaluation error(%s:%d): unknown symbol: '%s'\n", __FILE__, __LINE__, FML_CAR(pair)->tok->lit);
   }
   else
     return FML_PAIR(eval(FML_CAR(pair)), eval(FML_CDR(pair)));
