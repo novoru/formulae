@@ -12,12 +12,18 @@ Object *builtin_add(Env *env, Object *list) {
   
   Object *result = new_obj_num(car->num);
   Object *cdr = eval(env, FML_CDR(list));
-  
-  while(!IS_NIL(cdr)) {
-    if(!IS_NUM(FML_CAR(cdr)))
-      error("builtin error(%s:%d): invalid argument: '%s'", __FILE__, __LINE__, inspect_obj_kind(FML_CAR(cdr)));
-    result->num += FML_CAR(cdr)->num;
-    cdr = FML_CDR(cdr);
+
+  if(IS_PAIR(cdr)) {
+    while(!IS_NIL(cdr)) {
+      Object *obj = eval(env, FML_CAR(cdr));
+      if(!IS_NUM(obj))
+	error("builtin error(%s:%d): invalid argument: '%s'", __FILE__, __LINE__, inspect_obj_kind(obj));
+      result->num += obj->num;
+      cdr = eval(env, FML_CDR(cdr));
+    }
+  }
+  else if(IS_NUM(cdr)) {
+    result->num += cdr->num;
   }
     
   return result;
@@ -34,12 +40,18 @@ Object *builtin_sub(Env *env, Object *list) {
   
   Object *result = new_obj_num(car->num);
   Object *cdr = eval(env, FML_CDR(list));
-  
-  while(!IS_NIL(cdr)) {
-    if(!IS_NUM(FML_CAR(cdr)))
-      error("builtin error(%s:%d): invalid argument: '%s'", __FILE__, __LINE__, inspect_obj_kind(FML_CAR(cdr)));
-    result->num -= FML_CAR(cdr)->num;
-    cdr = FML_CDR(cdr);
+
+  if(IS_PAIR(cdr)) {
+    while(!IS_NIL(cdr)) {
+      Object *obj = eval(env, FML_CAR(cdr));
+      if(!IS_NUM(obj))
+	error("builtin error(%s:%d): invalid argument: '%s'", __FILE__, __LINE__, inspect_obj_kind(obj));
+      result->num -= obj->num;
+      cdr = eval(env, FML_CDR(cdr));
+    }
+  }
+  else if(IS_NUM(cdr)) {
+    result->num += cdr->num;
   }
     
   return result;
@@ -56,12 +68,18 @@ Object *builtin_mult(Env *env, Object *list) {
   
   Object *result = new_obj_num(car->num);
   Object *cdr = eval(env, FML_CDR(list));
-  
-  while(!IS_NIL(cdr)) {
-    if(!IS_NUM(FML_CAR(cdr)))
-      error("builtin error(%s:%d): invalid argument: '%s'", __FILE__, __LINE__, inspect_obj_kind(FML_CAR(cdr)));
-    result->num *= FML_CAR(cdr)->num;
-    cdr = FML_CDR(cdr);
+
+  if(IS_PAIR(cdr)) {
+    while(!IS_NIL(cdr)) {
+      Object *obj = eval(env, FML_CAR(cdr));
+      if(!IS_NUM(obj))
+	error("builtin error(%s:%d): invalid argument: '%s'", __FILE__, __LINE__, inspect_obj_kind(obj));
+      result->num *= obj->num;
+      cdr = eval(env, FML_CDR(cdr));
+    }
+  }
+  else if(IS_NUM(cdr)) {
+    result->num += cdr->num;
   }
     
   return result;
@@ -78,12 +96,18 @@ Object *builtin_div(Env *env, Object *list) {
   
   Object *result = new_obj_num(car->num);
   Object *cdr = eval(env, FML_CDR(list));
-  
-  while(!IS_NIL(cdr)) {
-    if(!IS_NUM(FML_CAR(cdr)))
-      error("builtin error(%s:%d): invalid argument: '%s'", __FILE__, __LINE__, inspect_obj_kind(FML_CAR(cdr)));
-    result->num /= FML_CAR(cdr)->num;
-    cdr = FML_CDR(cdr);
+
+  if(IS_PAIR(cdr)) {
+    while(!IS_NIL(cdr)) {
+      Object *obj = eval(env, FML_CAR(cdr));
+      if(!IS_NUM(obj))
+	error("builtin error(%s:%d): invalid argument: '%s'", __FILE__, __LINE__, inspect_obj_kind(obj));
+      result->num /= obj->num;
+      cdr = eval(env, FML_CDR(cdr));
+    }
+  }
+  else if(IS_NUM(cdr)) {
+    result->num += cdr->num;
   }
     
   return result;
@@ -108,19 +132,21 @@ Object *builtin_cons(Env *env, Object *list) {
 }
 
 Object *builtin_car(Env *env, Object *list) {
-  if(!IS_PAIR(FML_CAR(list))) {
+  Object *obj = eval(env, FML_CAR(list));
+  if(!IS_PAIR(obj)) {
     error("builtin error(%s:%d): invalid argument: '%s'", __FILE__, __LINE__, inspect_obj_kind(FML_CAR(list)));
   }
 
-  return FML_CAAR(list);
+  return FML_CAR(obj);
 }
 
 Object *builtin_cdr(Env *env, Object *list) {
-  if(!IS_PAIR(FML_CAR(list))) {
+  Object *obj = eval(env, FML_CAR(list));
+  if(!IS_PAIR(obj)) {
     error("builtin error(%s:%d): invalid argument: '%s'", __FILE__, __LINE__, inspect_obj_kind(FML_CAR(list)));
   }
 
-  return FML_CDAR(list);
+  return FML_CDR(obj);
 }
 
 Object *builtin_define(Env *env, Object *list) {

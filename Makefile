@@ -14,7 +14,7 @@ test:
 
 run:
 	make
-	./formulae -repl
+	./formulae
 
 clean:
 	rm -rf formulae *.o *~ tmp* a.out \#*

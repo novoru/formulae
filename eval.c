@@ -25,26 +25,25 @@ Object *eval(Env *env, Object *obj) {
 }
 
 static Object *eval_pair(Env *env, Object *pair) {
-  if(IS_SYMBOL(FML_CAR(pair))) {
-    Object* (*proc)(Env *, Object *) = get_proc(FML_CAR(pair)->tok->lit);
+  Object *car = FML_CAR(pair);
+  Object *cdr = FML_CDR(pair);
+  if(IS_SYMBOL(car)) {
+    Object* (*proc)(Env *, Object *) = get_proc(car->tok->lit);
     if(proc != NULL) {
-      Object *cdr = FML_CDR(pair);
       if(len_obj(cdr) < 0)
 	error("evaluation error(%s:%d): invalid argument", __FILE__, __LINE__);
       return proc(env, cdr);
     }
     else
-      error("evaluation error(%s:%d): unknown symbol: '%s'", __FILE__, __LINE__, FML_CAR(pair)->tok->lit);
+      return pair;
   }
   else
-    return FML_PAIR(eval(env, FML_CAR(pair)), eval(env, FML_CDR(pair)));
+    return FML_PAIR(eval(env, car), eval(env, cdr));
 }
 
 static Object *eval_symbol(Env *env, Object *obj) {
   Object *symbol = (Object *)get_env(env, obj->tok->lit);
 
-  printf("env: %s\n", inspect_env(env));
-  
   if(symbol == NULL)
     error("evaluation error(%s:%d): unknown symbol: '%s'", __FILE__, __LINE__, obj->tok->lit);
 

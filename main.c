@@ -4,6 +4,11 @@
 #include "test.h"
 
 int main(int argc, char **argv) {
+  if(argc == 1) {
+    repl();
+    exit(0);
+  }
+  
   if(argc < 2)
     exit(1);
 
@@ -13,11 +18,6 @@ int main(int argc, char **argv) {
     test_object();
     test_parser();
     test_eval();
-    exit(0);
-  }
-
-  if(argc == 2 && !strcmp(argv[1], "-repl")) {
-    repl();
     exit(0);
   }
 
