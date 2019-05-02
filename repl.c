@@ -9,6 +9,7 @@
 
 void repl() {
   Env *env = new_env();
+  init_env(env);
 
   while(1) {
     if(setjmp(err_env) != 0)

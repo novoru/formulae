@@ -8,6 +8,7 @@ static void test_eval_builtin() {
   Parser *p = new_parser(l);
   Object *obj = parse_expr(p);
   Env *env = new_env();
+  init_env(env);
   Object *result = eval(env, obj);
 
   expect_str(__FILE__, __LINE__, inspect_obj(result), "6");

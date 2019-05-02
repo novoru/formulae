@@ -5,6 +5,8 @@
 #include "formulae.h"
 #include "util.h"
 
+// prototype declaration
+typedef struct Env Env;
 
 /*-- token.c --*/
 typedef enum {
@@ -56,6 +58,7 @@ Token *next_token_lexer(Lexer *l);
 /*-- object.c --*/
 typedef enum {
   OBJ_PAIR,
+  OBJ_FUNC,
   OBJ_SYMBOL,
   OBJ_STRING,
   OBJ_NUM,
@@ -73,6 +76,13 @@ typedef struct Object{
       struct Object *cdr;
     };
 
+    // function
+    struct {
+      int nargs;
+      struct Env *env;
+      void *func;
+    };
+    
     // symbol
     Token *tok;
 
@@ -127,6 +137,7 @@ enum {
 };
 
 Object *new_obj_pair(Object *car, Object *cdr);
+Object *new_obj_func(Env *outer, int nargs, void *_func);
 Object *new_obj_symbol(Token *tok);
 Object *new_obj_str(char *s);
 Object *new_obj_num(int n);
@@ -135,13 +146,9 @@ Object *new_obj_nil();
 Object *append(Object *list, Object *cdr);
 char *inspect_obj(Object *obj);
 char *inspect_obj_kind(Object *obj);
-void init_proctbl();
-void register_proc(char *symbol, void *proc);
-void *get_proc(char *symbol);
 int len_obj(Object *obj);
 
 /*-- builtin.c --*/
-typedef struct Env Env;
 
 Object *builtin_add(Env *env, Object *list);
 Object *builtin_sub(Env *env, Object *list);
@@ -152,6 +159,7 @@ Object *builtin_car(Env *env, Object *list);
 Object *builtin_cdr(Env *env, Object *list);
 Object *builtin_length(Env *env, Object *list);
 Object *builtin_define(Env *env, Object *list);
+void register_func(Env *env, char *name, int nargs, void *_func);
 
 /*-- parser.c --*/
 typedef struct Parser{
@@ -180,6 +188,7 @@ Env *new_env();
 Env *new_enclosed_env(Env *outer);
 Object *get_env(Env *env, char *name);
 Object *set_env(Env *env, char *name, Object *obj);
+void init_env(Env *env);
 char *inspect_env(Env *env);
 
 #endif

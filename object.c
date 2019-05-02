@@ -10,6 +10,16 @@ Object *new_obj_pair(Object *car, Object *cdr) {
   return pair;
 }
 
+Object *new_obj_func(Env *outer, int nargs, void *_func) {
+  Object *func = malloc(sizeof(Object));
+  func->kind = OBJ_FUNC;
+  func->env = new_enclosed_env(outer);
+  func->nargs = nargs;
+  func->func = _func;
+  
+  return func;
+}
+
 Object *new_obj_symbol(Token *tok) {
   Object *symbol = malloc(sizeof(Object));
   symbol->kind = OBJ_SYMBOL;
@@ -91,29 +101,6 @@ char *inspect_obj_kind(Object *obj) {
   default:
     return format("ILLEGAL: %d", obj->kind);
   }
-}
-
-void init_proctbl() {
-  proctbl = new_map();
-
-  register_proc("+", (void *)builtin_add);
-  register_proc("-", (void *)builtin_sub);
-  register_proc("*", (void *)builtin_mult);
-  register_proc("/", (void *)builtin_div);
-
-  register_proc("cons", (void *)builtin_cons);
-  register_proc("car", (void *)builtin_car);
-  register_proc("cdr", (void *)builtin_cdr);
-  register_proc("length", (void *)builtin_length);
-  register_proc("define", (void *)builtin_define);
-}
-
-void register_proc(char *symbol, void *proc) {
-  map_push(proctbl, symbol, (void *)proc);
-}
-
-void *get_proc(char *symbol) {
-  return (void *)map_get(proctbl, symbol);
 }
 
 int len_obj(Object *obj) {

@@ -13,8 +13,6 @@ Parser *new_parser(Lexer *l) {
   next_token_parser(p);
   next_token_parser(p);
 
-  init_proctbl();
-  
   return p;
 }
 

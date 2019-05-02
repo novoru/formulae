@@ -5,7 +5,7 @@
 Env *new_env() {
   Env *env = malloc(sizeof(Env));
   env->store = new_map();
-  
+
   return env;
 }
 
@@ -29,6 +29,18 @@ Object *set_env(Env *env, char *name, Object *obj) {
   map_push(env->store, name, (void *)obj);
 
   return obj;
+}
+
+void init_env(Env *env) {
+  register_func(env, "+", -1, (void *)builtin_add);
+  register_func(env, "-", -1, (void *)builtin_sub);
+  register_func(env, "*", -1, (void *)builtin_mult);
+  register_func(env, "/", -1, (void *)builtin_div);
+
+  register_func(env, "length", 1, (void *)builtin_length);
+  register_func(env, "cons", 2, (void *)builtin_cons);
+  register_func(env, "car", 1, (void *)builtin_car);
+  register_func(env, "cdr", 1, (void *)builtin_cdr);
 }
 
 char *inspect_env(Env *env) {

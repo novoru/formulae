@@ -160,3 +160,8 @@ Object *builtin_define(Env *env, Object *list) {
   
   return FML_CAR(list);
 }
+
+void register_func(Env *env, char *name, int nargs, void *_func) {
+  Object *func = new_obj_func(env, nargs, _func);
+  set_env(env, name, func);
+}
