@@ -7,7 +7,8 @@ static void test_eval_builtin() {
   Lexer *l = new_lexer(src);
   Parser *p = new_parser(l);
   Object *obj = parse_expr(p);
-  Object *result = eval(obj);
+  Env *env = new_env();
+  Object *result = eval(env, obj);
 
   expect_str(__FILE__, __LINE__, inspect_obj(result), "6");
 
@@ -16,7 +17,7 @@ static void test_eval_builtin() {
   l = new_lexer(src);
   p = new_parser(l);
   obj = parse_expr(p);
-  result = eval(obj);
+  result = eval(env, obj);
 
   expect_str(__FILE__, __LINE__, inspect_obj(result), "5");
 
@@ -25,7 +26,7 @@ static void test_eval_builtin() {
   l = new_lexer(src);
   p = new_parser(l);
   obj = parse_expr(p);
-  result = eval(obj);
+  result = eval(env, obj);
 
   expect_str(__FILE__, __LINE__, inspect_obj(result), "24");
 
@@ -34,7 +35,7 @@ static void test_eval_builtin() {
   l = new_lexer(src);
   p = new_parser(l);
   obj = parse_expr(p);
-  result = eval(obj);
+  result = eval(env, obj);
 
   expect_str(__FILE__, __LINE__, inspect_obj(result), "4");
 
@@ -43,7 +44,7 @@ static void test_eval_builtin() {
   l = new_lexer(src);
   p = new_parser(l);
   obj = parse_expr(p);
-  result = eval(obj);
+  result = eval(env, obj);
 
   expect_str(__FILE__, __LINE__, inspect_obj(result), "6");
 
@@ -52,7 +53,7 @@ static void test_eval_builtin() {
   l = new_lexer(src);
   p = new_parser(l);
   obj = parse_expr(p);
-  result = eval(obj);
+  result = eval(env, obj);
 
   expect_str(__FILE__, __LINE__, inspect_obj(result), "(1 . 2)");
 
@@ -61,7 +62,7 @@ static void test_eval_builtin() {
   l = new_lexer(src);
   p = new_parser(l);
   obj = parse_expr(p);
-  result = eval(obj);
+  result = eval(env, obj);
 
   expect_str(__FILE__, __LINE__, inspect_obj(result), "1");
 
@@ -70,7 +71,7 @@ static void test_eval_builtin() {
   l = new_lexer(src);
   p = new_parser(l);
   obj = parse_expr(p);
-  result = eval(obj);
+  result = eval(env, obj);
 
   expect_str(__FILE__, __LINE__, inspect_obj(result), "(2 . ())");
 
@@ -79,7 +80,7 @@ static void test_eval_builtin() {
   l = new_lexer(src);
   p = new_parser(l);
   obj = parse_expr(p);
-  result = eval(obj);
+  result = eval(env, obj);
 
   expect_str(__FILE__, __LINE__, inspect_obj(result), "0");
 }

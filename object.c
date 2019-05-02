@@ -105,6 +105,7 @@ void init_proctbl() {
   register_proc("car", (void *)builtin_car);
   register_proc("cdr", (void *)builtin_cdr);
   register_proc("length", (void *)builtin_length);
+  register_proc("define", (void *)builtin_define);
 }
 
 void register_proc(char *symbol, void *proc) {

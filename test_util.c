@@ -27,11 +27,27 @@ void test_map() {
   map_push(map, "bar", (void*)100);
   map_push(map, "fizz", (void*)"hello");
   map_push(map, "buzz", (void*)"world");
+  map_push(map, "test1", (void*)"test1");
+  map_push(map, "test2", (void*)"test2");
+  map_push(map, "test3", (void*)"test3");
+  map_push(map, "test4", (void*)"test4");
+  map_push(map, "test5", (void*)"test5");
+  map_push(map, "test6", (void*)"test6");
+  map_push(map, "test7", (void*)"test7");
+  map_push(map, "test8", (void*)"test8");
 
   expect_int(__FILE__, __LINE__, (intptr_t)map_get(map, "foo"), 10);
   expect_int(__FILE__, __LINE__, (intptr_t)map_get(map, "bar"), 100);
   expect_str(__FILE__, __LINE__, (char*)map_get(map, "fizz"), "hello");
   expect_str(__FILE__, __LINE__, (char*)map_get(map, "buzz"), "world");
+  expect_str(__FILE__, __LINE__, (char*)map_get(map, "test1"), "test1");
+  expect_str(__FILE__, __LINE__, (char*)map_get(map, "test2"), "test2");
+  expect_str(__FILE__, __LINE__, (char*)map_get(map, "test3"), "test3");
+  expect_str(__FILE__, __LINE__, (char*)map_get(map, "test4"), "test4");
+  expect_str(__FILE__, __LINE__, (char*)map_get(map, "test5"), "test5");
+  expect_str(__FILE__, __LINE__, (char*)map_get(map, "test6"), "test6");
+  expect_str(__FILE__, __LINE__, (char*)map_get(map, "test7"), "test7");
+  expect_str(__FILE__, __LINE__, (char*)map_get(map, "test8"), "test8");
 }
 
 void test_util() {

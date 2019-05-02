@@ -5,7 +5,8 @@
 #include <stdnoreturn.h>
 #include <gc.h>
 
-#define malloc GC_MALLOC
+#define malloc GC_malloc
+#define realloc GC_realloc
 
 // Vector
 #define INIT_VEC_SIZE 8

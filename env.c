@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "formulae.h"
 #include "util.h"
 
@@ -44,6 +45,7 @@ char *inspect_env(Env *env) {
   for(int i = 0; i < env->store->keys->len; i++) {
     char *key = (char *)env->store->keys->data[i];
     Object *val = (Object *)env->store->vals->data[i];
+
     if(i == 0)
       s = format("%s%s: %s", s, key, inspect_obj(val));
     else

@@ -119,8 +119,7 @@ typedef struct Object{
 typedef Object* (*Proc)(Object *list);
 
 // global scope
-Map *proctbl;  // procedure
-Map *vartbl;   // variable
+struct Map *proctbl;  // procedure
 
 enum {
   FML_LIST_DOTTED = -1,
@@ -142,14 +141,17 @@ void *get_proc(char *symbol);
 int len_obj(Object *obj);
 
 /*-- builtin.c --*/
-Object *builtin_add(Object *list);
-Object *builtin_sub(Object *list);
-Object *builtin_mult(Object *list);
-Object *builtin_div(Object *list);
-Object *builtin_cons(Object *list);
-Object *builtin_car(Object *list);
-Object *builtin_cdr(Object *list);
-Object *builtin_length(Object *list);
+typedef struct Env Env;
+
+Object *builtin_add(Env *env, Object *list);
+Object *builtin_sub(Env *env, Object *list);
+Object *builtin_mult(Env *env, Object *list);
+Object *builtin_div(Env *env, Object *list);
+Object *builtin_cons(Env *env, Object *list);
+Object *builtin_car(Env *env, Object *list);
+Object *builtin_cdr(Env *env, Object *list);
+Object *builtin_length(Env *env, Object *list);
+Object *builtin_define(Env *env, Object *list);
 
 /*-- parser.c --*/
 typedef struct Parser{
@@ -166,7 +168,7 @@ Object *parse_expr(Parser *p);
 void repl();
 
 /*-- eval.c --*/
-Object *eval(Object *obj);
+Object *eval(Env *env, Object *obj);
 
 /*-- env.c --*/ 
 typedef struct Env{

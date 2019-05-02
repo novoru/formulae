@@ -8,6 +8,8 @@
 #define PROMPT ">> "
 
 void repl() {
+  Env *env = new_env();
+
   while(1) {
     if(setjmp(err_env) != 0)
       printf("continue...\n");
@@ -24,7 +26,7 @@ void repl() {
     
     printf("%s\n", inspect_obj(obj));
 
-    Object *result = eval(obj);
+    Object *result = eval(env, obj);
 
     if(obj == NULL)
       continue;
