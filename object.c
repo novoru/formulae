@@ -1,6 +1,13 @@
 #include <stdlib.h>
 #include "formulae.h"
 
+Object *new_obj_program() {
+  Object *program = malloc(sizeof(Object));
+  program->program = new_vec();
+
+  return program;
+}
+
 Object *new_obj_pair(Object *car, Object *cdr) {
   Object *pair = malloc(sizeof(Object));
   pair->kind = OBJ_PAIR;
@@ -77,6 +84,14 @@ Object *append(Object *list, Object *cdr) {
 
 char *inspect_obj(Object *obj) {
   switch (obj->kind) {
+  case OBJ_PROGRAM:
+    ;
+    char *s = "";
+    for(int i = 0; i < obj->program->len; i++) {
+      if(i == 0) s = inspect_obj((Object *)obj->program->data[i]);
+      else s = format("%s\n%s", s, inspect_obj((Object *)obj->program->data[i]));
+    }
+    return s;
   case OBJ_PAIR:
     return format("(%s . %s)", inspect_obj(obj->car), inspect_obj(obj->cdr));
   case OBJ_BUILTIN:
@@ -100,6 +115,8 @@ char *inspect_obj(Object *obj) {
 
 char *inspect_obj_kind(Object *obj) {
   switch (obj->kind) {
+  case OBJ_PROGRAM:
+    return "PROGRAM";
   case OBJ_PAIR:
     return "PAIR";
   case OBJ_BUILTIN:

@@ -86,7 +86,6 @@ static void test_eval_builtin() {
   expect_str(__FILE__, __LINE__, inspect_obj(result), "0");
 }
 
-/*
 static void test_eval_closure() {
   char *src = "(define square (lambda (a) (* a a)))(square 2)";
   Lexer *l = new_lexer(src);
@@ -96,13 +95,20 @@ static void test_eval_closure() {
   init_env(env);
   Object *result = eval(env, obj);
 
-  expect_int(__FILE__, __LINE__, inspect_obj(result), "4");
+  expect_str(__FILE__, __LINE__, inspect_obj(result), "4");
+
+  src = "(define foo (lambda () (+ 1 2)))(foo)";
+  l = new_lexer(src);
+  p = new_parser(l);
+  obj = parse_expr(p);
+  result = eval(env, obj);
+
+  expect_str(__FILE__, __LINE__, inspect_obj(result), "3");
 }
-*/
 
 void test_eval() {
   printf("*test_eval*\n");
   test_eval_builtin();
-  //test_eval_closure();
+  test_eval_closure();
   printf("OK\n");
 }

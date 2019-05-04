@@ -22,11 +22,13 @@ void next_token_parser(Parser *p) {
 }
 
 Object *parse_expr(Parser *p) {
-  Object *obj = new_obj_nil();
+  Object *obj = FML_PROGRAM();
+  Object *tmp = FML_NIL();
   
   while(p->curTok->kind != TOK_EOF) {
-    obj = parse_sexpr(p);
-    if(obj == NULL) return obj;
+    tmp = parse_sexpr(p);
+    if(tmp == NULL) return obj;
+    vec_push(obj->program, (void *)tmp);
     next_token_parser(p);
   }
 

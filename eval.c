@@ -2,12 +2,15 @@
 #include <stdio.h>
 #include "formulae.h"
 
+static Object *eval_program(Env *env, Object *obj);
 static Object *eval_pair(Env *env, Object *pair);
 static Object *eval_symbol(Env *env, Object *obj);
 static Object *eval_closure(Object *closure, Object *args);
 
 Object *eval(Env *env, Object *obj) {
   switch(obj->kind) {
+  case OBJ_PROGRAM:
+    return eval_program(env, obj);
   case OBJ_PAIR:
     return eval_pair(env, obj);
   case OBJ_BUILTIN:
@@ -27,6 +30,18 @@ Object *eval(Env *env, Object *obj) {
   default:
     return obj;
   }
+}
+
+static Object *eval_program(Env *env, Object *obj) {
+  if(obj->program->len == 0) return FML_NIL();
+
+  Object *result = FML_NIL();
+  
+  for(int i = 0; i < obj->program->len; i++) {
+    result = eval(env, (Object *)obj->program->data[i]);
+  }
+
+  return result;
 }
 
 static Object *eval_pair(Env *env, Object *pair) {

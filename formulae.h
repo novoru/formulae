@@ -57,6 +57,7 @@ Token *next_token_lexer(Lexer *l);
 
 /*-- object.c --*/
 typedef enum {
+  OBJ_PROGRAM,
   OBJ_PAIR,
   OBJ_BUILTIN,
   OBJ_CLOSURE,
@@ -71,6 +72,9 @@ typedef struct Object{
   ObjKind kind;
 
   union {
+    // program
+    struct Vector *program;
+    
     // pair
     struct {
       struct Object *car;
@@ -112,6 +116,7 @@ typedef struct Object{
 } Object;
 
 // constructor
+#define FML_PROGRAM()       (new_obj_program())    
 #define FML_PAIR(car, cdr)  (new_obj_pair(car, cdr))
 #define FML_SYMBOL(tok)     (new_obj_symbol(tok))
 #define FML_STR(str)        (new_obj_str(str))
