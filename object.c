@@ -10,14 +10,24 @@ Object *new_obj_pair(Object *car, Object *cdr) {
   return pair;
 }
 
-Object *new_obj_func(Env *outer, int nargs, void *_func) {
-  Object *func = malloc(sizeof(Object));
-  func->kind = OBJ_FUNC;
-  func->env = new_enclosed_env(outer);
-  func->nargs = nargs;
-  func->func = _func;
+Object *new_obj_builtin(Env *outer, int nargs, void *b) {
+  Object *builtin = malloc(sizeof(Object));
+  builtin->kind = OBJ_BUILTIN;
+  builtin->env = new_enclosed_env(outer);
+  builtin->nargs = nargs;
+  builtin->builtin = b;
   
-  return func;
+  return builtin;
+}
+
+Object *new_obj_closure(Env *outer, Object *args, void *c) {
+  Object *closure = malloc(sizeof(Object));
+  closure->kind = OBJ_CLOSURE;
+  closure->env = new_enclosed_env(outer);
+  closure->args = args;
+  closure->closure = c;
+  
+  return closure;
 }
 
 Object *new_obj_symbol(Token *tok) {
@@ -69,6 +79,10 @@ char *inspect_obj(Object *obj) {
   switch (obj->kind) {
   case OBJ_PAIR:
     return format("(%s . %s)", inspect_obj(obj->car), inspect_obj(obj->cdr));
+  case OBJ_BUILTIN:
+    return "builtin";
+  case OBJ_CLOSURE:
+    return "closure";
   case OBJ_SYMBOL:
     return obj->tok->lit;
   case OBJ_STRING:
@@ -88,6 +102,10 @@ char *inspect_obj_kind(Object *obj) {
   switch (obj->kind) {
   case OBJ_PAIR:
     return "PAIR";
+  case OBJ_BUILTIN:
+    return "BUILTIN";
+  case OBJ_CLOSURE:
+    return "CLOSURE";
   case OBJ_SYMBOL:
     return "SYMBOL";
   case OBJ_STRING:
@@ -124,4 +142,8 @@ int len_obj(Object *obj) {
   }
   
   return len;
+}
+
+Object *apply_func(Env *env, Object *func, Object *args) {
+  
 }

@@ -4,12 +4,15 @@
 
 static Object *eval_pair(Env *env, Object *pair);
 static Object *eval_symbol(Env *env, Object *obj);
+static Object *eval_closure(Object *closure, Object *args);
 
 Object *eval(Env *env, Object *obj) {
   switch(obj->kind) {
   case OBJ_PAIR:
     return eval_pair(env, obj);
-  case OBJ_FUNC:
+  case OBJ_BUILTIN:
+    return obj;
+  case OBJ_CLOSURE:
     return obj;
   case OBJ_SYMBOL:
     return eval_symbol(env, obj);
@@ -29,25 +32,19 @@ Object *eval(Env *env, Object *obj) {
 static Object *eval_pair(Env *env, Object *pair) {
   Object *car = FML_CAR(pair);
   Object *cdr = FML_CDR(pair);
-  /*if(IS_SYMBOL(car)) {
-    Object* (*proc)(Env *, Object *) = get_proc(car->tok->lit);
-    if(proc != NULL) {
-      if(len_obj(cdr) < 0)
-	error("evaluation error(%s:%d): invalid argument", __FILE__, __LINE__);
-      return proc(env, cdr);
-    }
-  }
-  */
 
   if(IS_SYMBOL(car)) {
     Object *obj = eval_symbol(env, car);
 
-    if(obj->kind == OBJ_FUNC) {
-      Object* (*func)(Env *env, Object *args) = obj->func;
+    if(IS_BUILTIN(obj)) {
+      Object* (*builtin)(Env *env, Object *args) = obj->builtin;
       if(obj->nargs < 0) {}
       else if(obj->nargs != len_obj(cdr))
 	error("evaluation error(%s:%d): invalid number of arguments: %d", __FILE__, __LINE__, len_obj(cdr));
-      return func(env, cdr);
+      return builtin(env, cdr);
+    }
+    else if(IS_CLOSURE(obj)) {
+      return eval_closure(obj, cdr);
     }
   }
   
@@ -61,4 +58,19 @@ static Object *eval_symbol(Env *env, Object *obj) {
     error("evaluation error(%s:%d): unknown symbol: '%s'", __FILE__, __LINE__, obj->tok->lit);
 
   return eval(env, symbol);
+}
+
+static Object *eval_closure(Object *closure, Object *args) {
+  if(len_obj(closure->args) != len_obj(args))
+    error("evaluation error(%s:%d): invalid number of arguments: %d", __FILE__, __LINE__, len_obj(args));
+
+  Object *ccar = FML_CAR(closure->args);
+  Object *ccdr = FML_CDR(closure->args);
+  
+  Object *acar = FML_CAR(args);
+  Object *acdr = FML_CDR(args);
+
+  set_env(closure->env, ccar->tok->lit, acar);
+
+  return eval(closure->env, closure->closure);
 }

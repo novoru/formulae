@@ -32,15 +32,17 @@ Object *set_env(Env *env, char *name, Object *obj) {
 }
 
 void init_env(Env *env) {
-  register_func(env, "+", -1, (void *)builtin_add);
-  register_func(env, "-", -1, (void *)builtin_sub);
-  register_func(env, "*", -1, (void *)builtin_mult);
-  register_func(env, "/", -1, (void *)builtin_div);
+  register_builtin(env, "+", -1, (void *)builtin_add);
+  register_builtin(env, "-", -1, (void *)builtin_sub);
+  register_builtin(env, "*", -1, (void *)builtin_mult);
+  register_builtin(env, "/", -1, (void *)builtin_div);
 
-  register_func(env, "length", 1, (void *)builtin_length);
-  register_func(env, "cons", 2, (void *)builtin_cons);
-  register_func(env, "car", 1, (void *)builtin_car);
-  register_func(env, "cdr", 1, (void *)builtin_cdr);
+  register_builtin(env, "length", 1, (void *)builtin_length);
+  register_builtin(env, "cons", 2, (void *)builtin_cons);
+  register_builtin(env, "car", 1, (void *)builtin_car);
+  register_builtin(env, "cdr", 1, (void *)builtin_cdr);
+  register_builtin(env, "define", 2, (void *)builtin_define);
+  register_builtin(env, "lambda", 2, (void *)builtin_lambda);
 }
 
 char *inspect_env(Env *env) {

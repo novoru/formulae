@@ -58,7 +58,8 @@ Token *next_token_lexer(Lexer *l);
 /*-- object.c --*/
 typedef enum {
   OBJ_PAIR,
-  OBJ_FUNC,
+  OBJ_BUILTIN,
+  OBJ_CLOSURE,
   OBJ_SYMBOL,
   OBJ_STRING,
   OBJ_NUM,
@@ -78,10 +79,22 @@ typedef struct Object{
 
     // function
     struct {
-      int nargs;
       struct Env *env;
-      void *func;
+      union {
+	// builtin
+	struct {
+	  int nargs;
+	  void *builtin;
+	};
+	// closure
+	struct {
+	  struct Object *args;
+	  struct Object *closure;
+	};
+      };
     };
+
+    // function
     
     // symbol
     Token *tok;
@@ -120,6 +133,8 @@ typedef struct Object{
 #define FML_CADDDDR(obj)    (FML_CAR(FML_CDDDDR(obj)))
 #define FML_CDDDDDR(obj)    (FML_CDR(FML_CDDDDR(obj)))
 #define IS_PAIR(obj)        (obj->kind == OBJ_PAIR)
+#define IS_BUILTIN(obj)     (obj->kind == OBJ_BUILTIN)
+#define IS_CLOSURE(obj)     (obj->kind == OBJ_CLOSURE)
 #define IS_SYMBOL(obj)      (obj->kind == OBJ_SYMBOL)
 #define IS_STRING(obj)      (obj->kind == OBJ_STRING)
 #define IS_NUM(obj)         (obj->kind == OBJ_NUM)
@@ -137,7 +152,8 @@ enum {
 };
 
 Object *new_obj_pair(Object *car, Object *cdr);
-Object *new_obj_func(Env *outer, int nargs, void *_func);
+Object *new_obj_builtin(Env *outer, int nargs, void *b);
+Object *bew_obj_closure(Env *outer, Object *args, Object *c);
 Object *new_obj_symbol(Token *tok);
 Object *new_obj_str(char *s);
 Object *new_obj_num(int n);
@@ -159,7 +175,8 @@ Object *builtin_car(Env *env, Object *list);
 Object *builtin_cdr(Env *env, Object *list);
 Object *builtin_length(Env *env, Object *list);
 Object *builtin_define(Env *env, Object *list);
-void register_func(Env *env, char *name, int nargs, void *_func);
+Object *builtin_lambda(Env *env, Object *list);
+void register_builtin(Env *env, char *name, int nargs, void *b);
 
 /*-- parser.c --*/
 typedef struct Parser{

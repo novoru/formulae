@@ -161,7 +161,27 @@ Object *builtin_define(Env *env, Object *list) {
   return FML_CAR(list);
 }
 
-void register_func(Env *env, char *name, int nargs, void *_func) {
-  Object *func = new_obj_func(env, nargs, _func);
-  set_env(env, name, func);
+Object *builtin_lambda(Env *env, Object *list) {
+  if(len_obj(list) != 2)
+    error("builtin error(%s:%d): invalid number of arguments: '%d'", __FILE__, __LINE__, len_obj(list));
+  
+  Object *args = FML_CAR(list);
+  Object *body = FML_CDR(list);
+
+  Object *tmp = args;
+  
+  do {
+    if(!IS_SYMBOL(FML_CAR(tmp)))
+      error("builtin error(%s:%d): invalid argument: '%s'", __FILE__, __LINE__, inspect_obj_kind(FML_CAR(tmp)));
+    tmp = FML_CDR(tmp);
+  } while(!IS_NIL(tmp) || IS_PAIR(tmp));
+  
+  Object *closure = new_obj_closure(env, args, body);
+  
+  return closure;
+}
+
+void register_builtin(Env *env, char *name, int nargs, void *b) {
+  Object *builtin = new_obj_builtin(env, nargs, b);
+  set_env(env, name, builtin);
 }
