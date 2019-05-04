@@ -35,12 +35,13 @@ static Object *eval_pair(Env *env, Object *pair) {
 
   if(IS_SYMBOL(car)) {
     Object *obj = eval_symbol(env, car);
-
+    
     if(IS_BUILTIN(obj)) {
       Object* (*builtin)(Env *env, Object *args) = obj->builtin;
+
       if(obj->nargs < 0) {}
       else if(obj->nargs != len_obj(cdr))
-	error("evaluation error(%s:%d): invalid number of arguments: %d", __FILE__, __LINE__, len_obj(cdr));
+	error("evaluation error(%s:%d)\n: invalid number of arguments: %d", __FILE__, __LINE__, len_obj(cdr));
       return builtin(env, cdr);
     }
     else if(IS_CLOSURE(obj)) {
@@ -55,14 +56,17 @@ static Object *eval_symbol(Env *env, Object *obj) {
   Object *symbol = (Object *)get_env(env, obj->tok->lit);
 
   if(symbol == NULL)
-    error("evaluation error(%s:%d): unknown symbol: '%s'", __FILE__, __LINE__, obj->tok->lit);
+    error("evaluation error(%s:%d)\n: unknown symbol: '%s'", __FILE__, __LINE__, obj->tok->lit);
 
   return eval(env, symbol);
 }
 
 static Object *eval_closure(Object *closure, Object *args) {
   if(len_obj(closure->args) != len_obj(args))
-    error("evaluation error(%s:%d): invalid number of arguments: %d", __FILE__, __LINE__, len_obj(args));
+    error("evaluation error(%s:%d)\n: invalid number of arguments: %d", __FILE__, __LINE__, len_obj(args));
+
+  if(len_obj(closure->args) == 0)
+    return eval(closure->env, closure->closure);
 
   Object *ccar = FML_CAR(closure->args);
   Object *ccdr = FML_CDR(closure->args);

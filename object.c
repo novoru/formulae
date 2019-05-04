@@ -82,7 +82,7 @@ char *inspect_obj(Object *obj) {
   case OBJ_BUILTIN:
     return "builtin";
   case OBJ_CLOSURE:
-    return "closure";
+    return "closure-> (args:%s), (body:%s)", inspect_obj(obj->args), inspect_obj(obj->closure);
   case OBJ_SYMBOL:
     return obj->tok->lit;
   case OBJ_STRING:

@@ -164,20 +164,20 @@ Object *builtin_define(Env *env, Object *list) {
 Object *builtin_lambda(Env *env, Object *list) {
   if(len_obj(list) != 2)
     error("builtin error(%s:%d): invalid number of arguments: '%d'", __FILE__, __LINE__, len_obj(list));
-  
+
   Object *args = FML_CAR(list);
-  Object *body = FML_CDR(list);
+  Object *body = FML_CADR(list);
 
   Object *tmp = args;
-  
-  do {
+
+  while(!IS_NIL(tmp) || IS_PAIR(tmp)) {
     if(!IS_SYMBOL(FML_CAR(tmp)))
       error("builtin error(%s:%d): invalid argument: '%s'", __FILE__, __LINE__, inspect_obj_kind(FML_CAR(tmp)));
     tmp = FML_CDR(tmp);
-  } while(!IS_NIL(tmp) || IS_PAIR(tmp));
+  }
   
   Object *closure = new_obj_closure(env, args, body);
-  
+
   return closure;
 }
 
