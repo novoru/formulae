@@ -72,5 +72,14 @@ static Object *eval_closure(Object *closure, Object *args) {
 
   set_env(closure->env, ccar->tok->lit, acar);
 
+  while(!IS_NIL(ccdr)) {
+    ccar = FML_CAR(ccdr);
+    ccdr = FML_CDR(ccdr);
+    acar = FML_CAR(acdr);
+    acdr = FML_CDR(acdr);
+
+    set_env(closure->env, ccar->tok->lit, acar);
+  }
+
   return eval(closure->env, closure->closure);
 }
