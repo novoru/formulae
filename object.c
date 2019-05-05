@@ -75,6 +75,14 @@ Object *new_obj_nil() {
   return nil;
 }
 
+Object *new_obj_bool(bool b) {
+  Object *obj = malloc(sizeof(Object));
+  obj->kind = OBJ_BOOL;
+  obj->b = b;
+
+  return obj;
+}
+
 Object *append(Object *list, Object *cdr) {
   if(IS_NIL(list))
     return cdr;
@@ -106,6 +114,8 @@ char *inspect_obj(Object *obj) {
     return format("%d", obj->num);
   case OBJ_FLOAT:
     return format("%l", obj->fnum);
+  case OBJ_BOOL:
+    return (obj->b) ? "#t":"#f";
   case OBJ_NIL:
     return "()";
   default:
@@ -133,6 +143,8 @@ char *inspect_obj_kind(Object *obj) {
     return "FLOAT";
   case OBJ_NIL:
     return "NIL";
+  case OBJ_BOOL:
+    return "BOOL";
   default:
     return format("ILLEGAL: %d", obj->kind);
   }
@@ -159,4 +171,24 @@ int len_obj(Object *obj) {
   }
   
   return len;
+}
+
+Object *cmp_obj(Object *obj1, Object *obj2) {
+  if(obj1->kind != obj2->kind)
+    return FML_BOOL(false);
+
+  switch(obj1->kind) {
+  case OBJ_NUM:
+    return FML_BOOL(obj1->num == obj2->num ? true:false);
+  case OBJ_BOOL:
+    return FML_BOOL(obj1->b == obj2->b ? true:false);
+  case OBJ_NIL:
+    return FML_TRUE();
+  case OBJ_CLOSURE:
+    return FML_BOOL((obj1->args == obj2->args) && (obj1->closure == obj2->closure) ? true:false);
+  default:
+    printf("obj1:%s, obj2:%s\n", inspect_obj(obj1), inspect_obj(obj2));
+    printf("&obj1:%d, &obj2:%d\n", obj1, obj2);
+    return FML_BOOL(obj1 == obj2 ? true:false);
+  }
 }

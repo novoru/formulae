@@ -13,20 +13,15 @@ Object *eval(Env *env, Object *obj) {
     return eval_program(env, obj);
   case OBJ_PAIR:
     return eval_pair(env, obj);
-  case OBJ_BUILTIN:
-    return obj;
-  case OBJ_CLOSURE:
-    return obj;
   case OBJ_SYMBOL:
     return eval_symbol(env, obj);
+  case OBJ_BUILTIN:
+  case OBJ_CLOSURE:
   case OBJ_STRING:
-    return obj;
   case OBJ_NUM:
-    return obj;
   case OBJ_FLOAT:
-    return obj;
   case OBJ_NIL:
-    return obj;
+  case OBJ_BOOL:
   default:
     return obj;
   }
@@ -78,14 +73,14 @@ static Object *eval_symbol(Env *env, Object *obj) {
   Object *symbol = (Object *)get_env(env, obj->tok->lit);
 
   if(symbol == NULL)
-    error("evaluation error(%s:%d)\n: unknown symbol: '%s'", __FILE__, __LINE__, obj->tok->lit);
+    error("evaluation error(%s:%d): unknown symbol: '%s'", __FILE__, __LINE__, obj->tok->lit);
 
   return eval(env, symbol);
 }
 
 static Object *eval_closure(Env *env, Object *closure, Object *args) {
   if(len_obj(closure->args) != len_obj(args))
-    error("evaluation error(%s:%d)\n: invalid number of arguments: %d", __FILE__, __LINE__, len_obj(args));
+    error("evaluation error(%s:%d): invalid number of arguments: %d", __FILE__, __LINE__, len_obj(args));
 
   if(len_obj(closure->args) == 0)
     return eval(closure->env, closure->closure);
@@ -104,7 +99,7 @@ static Object *eval_closure(Env *env, Object *closure, Object *args) {
     acar = FML_CAR(acdr);
     acdr = FML_CDR(acdr);
 
-    set_env(closure->env, ccar->tok->lit, acar);
+    set_env(closure->env, ccar->tok->lit, eval(env, acar));
   }
 
   return eval(closure->env, closure->closure);

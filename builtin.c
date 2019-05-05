@@ -181,6 +181,37 @@ Object *builtin_lambda(Env *env, Object *list) {
   return closure;
 }
 
+Object *builtin_eq(Env *env, Object *list) {
+  if(len_obj(list) < 2)
+    error("builtin error(%s:%d): invalid number of arguments: '%d'", __FILE__, __LINE__, len_obj(list));
+
+  Object *car = eval(env, FML_CAR(list));
+  Object *cdr = eval(env, FML_CADR(list));
+
+  Object *result = cmp_obj(car, cdr);
+  
+  return result;
+}
+
+Object *builtin_if(Env *env, Object *list) {
+  if(len_obj(list) < 2 || len_obj(list) > 3)
+    error("builtin error(%s:%d): invalid number of arguments: '%d'", __FILE__, __LINE__, len_obj(list));
+
+  Object *cond = eval(env, FML_CAR(list));
+  Object *conseq = FML_CADR(list);
+  
+  if(IS_BOOL(cond)) {
+    if(IS_TRUE(cond))
+      return eval(env, conseq);
+    else if(IS_NIL(FML_CDDR(list)))
+      return FML_NIL();
+    else
+      return eval(env, eval(env, conseq));
+  }
+  
+  return eval(env, conseq);
+}
+
 void register_builtin(Env *env, char *name, int nargs, void *b) {
   Object *builtin = new_obj_builtin(env, nargs, b);
   set_env(env, name, builtin);

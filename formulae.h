@@ -2,6 +2,7 @@
 #define FORMULAE_H
 
 #include <stddef.h>
+#include <stdbool.h>
 #include "formulae.h"
 #include "util.h"
 
@@ -66,6 +67,7 @@ typedef enum {
   OBJ_NUM,
   OBJ_FLOAT,
   OBJ_NIL,
+  OBJ_BOOL,
 } ObjKind;
 
 typedef struct Object{
@@ -98,8 +100,6 @@ typedef struct Object{
       };
     };
 
-    // function
-    
     // symbol
     Token *tok;
 
@@ -111,6 +111,9 @@ typedef struct Object{
 
     // floating point number
     float fnum;
+
+    // boolean
+    bool b;
   };
   
 } Object;
@@ -123,6 +126,9 @@ typedef struct Object{
 #define FML_NUM(num)        (new_obj_num(num))
 #define FML_FLOAT(fnum)     (new_obj_float(fnum))
 #define FML_NIL()           (new_obj_nil())
+#define FML_BOOL(bool)      (new_obj_bool(bool))
+#define FML_TRUE()          (new_obj_bool(true))
+#define FML_FALSE()         (new_obj_bool(false))
 
 // utility
 #define FML_CAR(obj)        (obj->car)
@@ -145,6 +151,9 @@ typedef struct Object{
 #define IS_NUM(obj)         (obj->kind == OBJ_NUM)
 #define IS_FNUM(obj)        (obj->kind == OBJ_FNUM)
 #define IS_NIL(obj)         (obj->kind == OBJ_NIL)
+#define IS_BOOL(obj)        (obj->kind == OBJ_BOOL)
+#define IS_TRUE(obj)        (obj->b == true)
+#define IS_FALSE(obj)       (obj->b == false)
 
 typedef Object* (*Proc)(Object *list);
 
@@ -165,10 +174,12 @@ Object *new_obj_str(char *s);
 Object *new_obj_num(int n);
 Object *new_obj_float(float f);
 Object *new_obj_nil();
+Object *new_obj_bool(bool b);
 Object *append(Object *list, Object *cdr);
 char *inspect_obj(Object *obj);
 char *inspect_obj_kind(Object *obj);
 int len_obj(Object *obj);
+Object *cmp_obj(Object *obj1, Object *obj2);
 
 /*-- builtin.c --*/
 
@@ -182,6 +193,8 @@ Object *builtin_cdr(Env *env, Object *list);
 Object *builtin_length(Env *env, Object *list);
 Object *builtin_define(Env *env, Object *list);
 Object *builtin_lambda(Env *env, Object *list);
+Object *builtin_eq(Env *env, Object *list);
+Object *builtin_if(Env *env, Object *list);
 void register_builtin(Env *env, char *name, int nargs, void *b);
 
 /*-- parser.c --*/

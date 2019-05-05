@@ -58,9 +58,13 @@ static Object *parse_sexpr(Parser *p) {
       next_token_parser(p);
     }
   case TOK_IDENT:
-    return new_obj_symbol(p->curTok);
+    return FML_SYMBOL(p->curTok);
   case TOK_NUM:
-    return new_obj_num(atoi(p->curTok->lit));
+    return FML_NUM(atoi(p->curTok->lit));
+  case TOK_TRUE:
+    return FML_BOOL(true);
+  case TOK_FALSE:
+    return FML_BOOL(false);
   default:
     return NULL; // TODO: error handling
   }

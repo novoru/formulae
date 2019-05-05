@@ -18,9 +18,20 @@ Env *new_enclosed_env(Env *outer) {
 
 Object *get_env(Env *env, char *name) {
   Object *obj = (Object *)map_get(env->store, name);
-
+  Env *tmp = env->outer;
+    
+  while(obj == NULL && tmp!= NULL) {
+    obj = map_get(tmp->store, name);
+    if(tmp->outer != NULL)
+      tmp = tmp->outer;
+    else
+      break;
+  }
+  
+  /*
   if(obj == NULL && env->outer != NULL)
     obj = map_get(env->outer->store, name);
+  */
 
   return obj;
 }
@@ -36,6 +47,7 @@ void init_env(Env *env) {
   register_builtin(env, "-", -1, (void *)builtin_sub);
   register_builtin(env, "*", -1, (void *)builtin_mult);
   register_builtin(env, "/", -1, (void *)builtin_div);
+  register_builtin(env, "=", -1, (void *)builtin_eq);
 
   register_builtin(env, "length", 1, (void *)builtin_length);
   register_builtin(env, "cons", 2, (void *)builtin_cons);
@@ -43,6 +55,7 @@ void init_env(Env *env) {
   register_builtin(env, "cdr", 1, (void *)builtin_cdr);
   register_builtin(env, "define", 2, (void *)builtin_define);
   register_builtin(env, "lambda", 2, (void *)builtin_lambda);
+  register_builtin(env, "if", -1, (void *)builtin_if);
 }
 
 char *inspect_env(Env *env) {
@@ -52,7 +65,7 @@ char *inspect_env(Env *env) {
   char *s = "";
 
   if(env->outer != NULL)
-    s = format("%s\n", inspect_env(env->outer));
+    s = format("outer->%s\n", inspect_env(env->outer));
 
   s = format("{%s ", s);
 
