@@ -187,8 +187,6 @@ Object *cmp_obj(Object *obj1, Object *obj2) {
   case OBJ_CLOSURE:
     return FML_BOOL((obj1->args == obj2->args) && (obj1->closure == obj2->closure) ? true:false);
   default:
-    printf("obj1:%s, obj2:%s\n", inspect_obj(obj1), inspect_obj(obj2));
-    printf("&obj1:%d, &obj2:%d\n", obj1, obj2);
     return FML_BOOL(obj1 == obj2 ? true:false);
   }
 }

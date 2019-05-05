@@ -189,6 +189,21 @@ static void test_eval_rec() {
 
   expect_str(__FILE__, __LINE__, inspect_obj(result), "1");
   
+  src = "(define fact(lambda (n) (if (= n 1) 1 (* n (fact (- n 1))))))(fact 3)";
+  l = new_lexer(src);
+  p = new_parser(l);
+  obj = parse_expr(p);
+  result = eval(env, obj);
+
+  expect_str(__FILE__, __LINE__, inspect_obj(result), "6");
+
+  src = "(define fib(lambda (n) (if (= n 1) 1 (+ ((fib (- n 1))(fib (- n 2)))))))(fib 3)";
+  l = new_lexer(src);
+  p = new_parser(l);
+  obj = parse_expr(p);
+  result = eval(env, obj);
+
+  expect_str(__FILE__, __LINE__, inspect_obj(result), "6");
 }
 
 void test_eval() {

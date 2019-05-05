@@ -25,7 +25,7 @@ void repl() {
     if(obj == NULL)
       continue;
     
-    printf("%s\n", inspect_obj(obj));
+    //printf("%s\n", inspect_obj(obj));
 
     Object *result = eval(env, obj);
 

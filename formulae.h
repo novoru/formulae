@@ -195,6 +195,7 @@ Object *builtin_define(Env *env, Object *list);
 Object *builtin_lambda(Env *env, Object *list);
 Object *builtin_eq(Env *env, Object *list);
 Object *builtin_if(Env *env, Object *list);
+Object *builtin_lt(Env *env, Object *list);
 void register_builtin(Env *env, char *name, int nargs, void *b);
 
 /*-- parser.c --*/
