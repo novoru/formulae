@@ -197,13 +197,49 @@ static void test_eval_rec() {
 
   expect_str(__FILE__, __LINE__, inspect_obj(result), "6");
 
-  src = "(define fib(lambda (n) (if (= n 1) 1 (+ ((fib (- n 1))(fib (- n 2)))))))(fib 3)";
+  src = "(define fib(lambda (n) (if (< n 2) 1 (+ (fib (- n 1))(fib (- n 2))))))(fib 10)";
   l = new_lexer(src);
   p = new_parser(l);
   obj = parse_expr(p);
   result = eval(env, obj);
 
-  expect_str(__FILE__, __LINE__, inspect_obj(result), "6");
+  expect_str(__FILE__, __LINE__, inspect_obj(result), "89");
+}
+
+static void test_eval_cmp() {
+  char *src = "(< 1 2)";
+  Lexer *l = new_lexer(src);
+  Parser *p = new_parser(l);
+  Object *obj = parse_expr(p);
+  Env *env = new_env();
+  init_env(env);
+  Object *result = eval(env, obj);
+
+  expect_str(__FILE__, __LINE__, inspect_obj(result), "#t");
+
+  src = "(< 2 1)";
+  l = new_lexer(src);
+  p = new_parser(l);
+  obj = parse_expr(p);
+  result = eval(env, obj);
+
+  expect_str(__FILE__, __LINE__, inspect_obj(result), "#f");
+
+  src = "(> 2 1)";
+  l = new_lexer(src);
+  p = new_parser(l);
+  obj = parse_expr(p);
+  result = eval(env, obj);
+
+  expect_str(__FILE__, __LINE__, inspect_obj(result), "#t");
+
+  src = "(> 1 2)";
+  l = new_lexer(src);
+  p = new_parser(l);
+  obj = parse_expr(p);
+  result = eval(env, obj);
+
+  expect_str(__FILE__, __LINE__, inspect_obj(result), "#f");
 }
 
 void test_eval() {
@@ -211,5 +247,6 @@ void test_eval() {
   test_eval_builtin();
   test_eval_closure();
   test_eval_rec();
+  test_eval_cmp();
   printf("OK\n");
 }

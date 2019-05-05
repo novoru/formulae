@@ -225,6 +225,19 @@ Object *builtin_lt(Env *env, Object *list) {
   return FML_BOOL(car->num < cdr->num ? true:false);
 }
 
+Object *builtin_gt(Env *env, Object *list) {
+  if(len_obj(list) < 2)
+    error("builtin error(%s:%d): invalid number of arguments: '%d'", __FILE__, __LINE__, len_obj(list));
+
+  Object *car = eval(env, FML_CAR(list));
+  Object *cdr = eval(env, FML_CADR(list));
+
+  if(!IS_NUM(car) || !IS_NUM(cdr))
+    error("builtin error(%s:%d): invalid argument", __FILE__, __LINE__);
+  
+  return FML_BOOL(car->num > cdr->num ? true:false);
+}
+
 void register_builtin(Env *env, char *name, int nargs, void *b) {
   Object *builtin = new_obj_builtin(env, nargs, b);
   set_env(env, name, builtin);

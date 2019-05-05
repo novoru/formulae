@@ -28,11 +28,6 @@ Object *get_env(Env *env, char *name) {
       break;
   }
   
-  /*
-  if(obj == NULL && env->outer != NULL)
-    obj = map_get(env->outer->store, name);
-  */
-
   return obj;
 }
 
@@ -49,6 +44,7 @@ void init_env(Env *env) {
   register_builtin(env, "/", -1, (void *)builtin_div);
   register_builtin(env, "=", -1, (void *)builtin_eq);
   register_builtin(env, "<", -1, (void *)builtin_lt);
+  register_builtin(env, ">", -1, (void *)builtin_gt);
 
   register_builtin(env, "length", 1, (void *)builtin_length);
   register_builtin(env, "cons", 2, (void *)builtin_cons);
