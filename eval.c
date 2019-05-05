@@ -5,7 +5,7 @@
 static Object *eval_program(Env *env, Object *obj);
 static Object *eval_pair(Env *env, Object *pair);
 static Object *eval_symbol(Env *env, Object *obj);
-static Object *eval_closure(Object *closure, Object *args);
+static Object *eval_closure(Env *env, Object *closure, Object *args);
 
 Object *eval(Env *env, Object *obj) {
   switch(obj->kind) {
@@ -50,18 +50,25 @@ static Object *eval_pair(Env *env, Object *pair) {
 
   if(IS_SYMBOL(car)) {
     Object *obj = eval_symbol(env, car);
-    
-    if(IS_BUILTIN(obj)) {
-      Object* (*builtin)(Env *env, Object *args) = obj->builtin;
 
-      if(obj->nargs < 0) {}
-      else if(obj->nargs != len_obj(cdr))
-	error("evaluation error(%s:%d)\n: invalid number of arguments: %d", __FILE__, __LINE__, len_obj(cdr));
-      return builtin(env, cdr);
-    }
-    else if(IS_CLOSURE(obj)) {
-      return eval_closure(obj, cdr);
-    }
+    return eval(env, FML_PAIR(obj, cdr));
+  }
+  else if(IS_BUILTIN(car)) {
+    Object* (*builtin)(Env *env, Object *args) = car->builtin;
+
+    if(car->nargs < 0) {}
+    else if(car->nargs != len_obj(cdr))
+      error("evaluation error(%s:%d): invalid number of arguments: %d", __FILE__, __LINE__, len_obj(cdr));
+    return builtin(env, cdr);
+  }
+  else if(IS_CLOSURE(car)) {
+    return eval_closure(env, car, cdr);
+  }
+  else if(IS_PAIR(car)) {
+    car = eval(env, car);
+    cdr = eval(env, cdr);
+
+    return eval(env, FML_PAIR(car, cdr));
   }
   
   return FML_PAIR(eval(env, car), eval(env, cdr));
@@ -76,7 +83,7 @@ static Object *eval_symbol(Env *env, Object *obj) {
   return eval(env, symbol);
 }
 
-static Object *eval_closure(Object *closure, Object *args) {
+static Object *eval_closure(Env *env, Object *closure, Object *args) {
   if(len_obj(closure->args) != len_obj(args))
     error("evaluation error(%s:%d)\n: invalid number of arguments: %d", __FILE__, __LINE__, len_obj(args));
 

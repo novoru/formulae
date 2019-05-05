@@ -156,9 +156,10 @@ enum {
   FML_LIST_CIRCULAR = -2,
 };
 
+Object *new_obj_program();
 Object *new_obj_pair(Object *car, Object *cdr);
 Object *new_obj_builtin(Env *outer, int nargs, void *b);
-Object *bew_obj_closure(Env *outer, Object *args, Object *c);
+Object *new_obj_closure(Env *outer, Object *args, Object *c);
 Object *new_obj_symbol(Token *tok);
 Object *new_obj_str(char *s);
 Object *new_obj_num(int n);

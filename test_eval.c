@@ -104,6 +104,22 @@ static void test_eval_closure() {
   result = eval(env, obj);
 
   expect_str(__FILE__, __LINE__, inspect_obj(result), "3");
+
+  src = "(define foo (lambda (a) (car a)))(foo (cons 1 2))";
+  l = new_lexer(src);
+  p = new_parser(l);
+  obj = parse_expr(p);
+  result = eval(env, obj);
+
+  expect_str(__FILE__, __LINE__, inspect_obj(result), "1");
+
+  src = "((lambda () (+ 1 2)))";
+  l = new_lexer(src);
+  p = new_parser(l);
+  obj = parse_expr(p);
+  result = eval(env, obj);
+
+  expect_str(__FILE__, __LINE__, inspect_obj(result), "3");
 }
 
 void test_eval() {

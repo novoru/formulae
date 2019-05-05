@@ -27,7 +27,7 @@ Object *new_obj_builtin(Env *outer, int nargs, void *b) {
   return builtin;
 }
 
-Object *new_obj_closure(Env *outer, Object *args, void *c) {
+Object *new_obj_closure(Env *outer, Object *args, Object *c) {
   Object *closure = malloc(sizeof(Object));
   closure->kind = OBJ_CLOSURE;
   closure->env = new_enclosed_env(outer);
@@ -97,7 +97,7 @@ char *inspect_obj(Object *obj) {
   case OBJ_BUILTIN:
     return "builtin";
   case OBJ_CLOSURE:
-    return "closure-> (args:%s), (body:%s)", inspect_obj(obj->args), inspect_obj(obj->closure);
+    return format("closure-> (args:%s), (body:%s)", inspect_obj(obj->args), inspect_obj(obj->closure));
   case OBJ_SYMBOL:
     return obj->tok->lit;
   case OBJ_STRING:
@@ -159,8 +159,4 @@ int len_obj(Object *obj) {
   }
   
   return len;
-}
-
-Object *apply_func(Env *env, Object *func, Object *args) {
-  
 }
